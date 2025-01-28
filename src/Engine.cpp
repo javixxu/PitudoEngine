@@ -1,33 +1,57 @@
 #include "Engine.h"
-
-#include <tigr.h>
 #include <iostream>
+#include <tigr.h>
+
 
 namespace PitudoEngine {
     bool Engine::Init(){
         m_bIsRunning = true;
-        screen = tigrWindow(320, 240, "Hello", 0);
-        return !!screen;// conv a explicito
+        m_screen = tigrWindow(320, 240, "Hello", 0);
+        
+        return !!m_screen;// conv a explicito
     }
 
     void Engine::Run(){
+        const float mustDelta = (1.0f / fps);
+        float initTime = tigrTime();
+        float prevFrameTime= 0.0f;
+
         while (m_bIsRunning) {
+
+            initTime += tigrTime();
+            if (initTime - prevFrameTime < mustDelta) {
+                float elpased= Wait((mustDelta - (initTime - prevFrameTime))*1000.0f);
+                initTime += elpased;
+            }
+            m_deltaTime = initTime - prevFrameTime;
+            prevFrameTime = initTime;
+
             //Input & Logica & Collisiones
             Update();
 
             //Renderizado
             Render();
+
         }
     }
 
     bool Engine::Quit(){
-        tigrFree(screen);
-        screen = nullptr;
+        tigrFree(m_screen);
+        m_screen = nullptr;
         return true;
     }
 
+    bool Engine::getIsRunning() const{
+        return m_bIsRunning;
+    }
+
+    void Engine::printText(const std::string& text)
+    {
+        tigrPrint(m_screen, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), text.c_str());
+    }
+
     void Engine::Input(){
-        m_bIsRunning = !tigrClosed(screen) && !tigrKeyDown(screen, TK_ESCAPE);
+        m_bIsRunning = !tigrClosed(m_screen) && !tigrKeyDown(m_screen, TK_ESCAPE);
     }
 
     void Engine::Update(){
@@ -41,20 +65,25 @@ namespace PitudoEngine {
     }
     void Engine::Render(){
         //CLEAR BUFFER
-        tigrClear(screen, tigrRGB(0x80, 0x90, 0xa0)); 
+        tigrClear(m_screen, tigrRGB(0x80, 0x90, 0xa0)); 
 
         //CONTENT QUE RENDERIZAR
-        //tigrPrint(screen, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), "Hello, world.");
+        printText(sstr(1.0/m_deltaTime));
 
         //ACTUALIZAR BUFFER
-        tigrUpdate(screen);
+        tigrUpdate(m_screen);
+    }
+
+    float Engine::Wait(float ms){
+        float totalTimeWaited = 0.0f;
+        while (ms > totalTimeWaited * 1000.0f) {
+            totalTimeWaited += tigrTime();
+        }
+
+        return totalTimeWaited;
     }
 
     void Engine::logme(const std::string& text) {
         std::cout << text << "\n";
-    }
-
-    void Engine::logme(const char* text) {
-        puts(text);
     }
 }
