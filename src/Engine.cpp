@@ -1,7 +1,10 @@
 #include "Engine.h"
 #include <iostream>
-#include <tigr.h>
 
+#include <tigr.h>
+#include "Vec2.h"
+
+#include "ecs.h"
 
 namespace PitudoEngine {
     bool Engine::Init(){
@@ -45,9 +48,9 @@ namespace PitudoEngine {
         return m_bIsRunning;
     }
 
-    void Engine::printText(const std::string& text)
+    void Engine::printText(const std::string& text,Vec2 pos)
     {
-        tigrPrint(m_screen, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), text.c_str());
+        tigrPrint(m_screen, tfont, pos.x, pos.y, tigrRGB(0xff, 0xff, 0xff), text.c_str());
     }
 
     void Engine::Input(){
@@ -68,7 +71,10 @@ namespace PitudoEngine {
         tigrClear(m_screen, tigrRGB(0x80, 0x90, 0xa0)); 
 
         //CONTENT QUE RENDERIZAR
-        printText(sstr(1.0/m_deltaTime));
+
+        #ifdef _DEBUG
+                RenderDebug();
+        #endif // DEBUG
 
         //ACTUALIZAR BUFFER
         tigrUpdate(m_screen);
@@ -81,6 +87,11 @@ namespace PitudoEngine {
         }
 
         return totalTimeWaited;
+    }
+
+    void Engine::RenderDebug(){
+        printText("DeltaTime: " + sstr(m_deltaTime), {30,30});
+        printText("FPS: " + sstr(1.0 / m_deltaTime), {30,45});
     }
 
     void Engine::logme(const std::string& text) {

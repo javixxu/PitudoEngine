@@ -27,6 +27,9 @@
     <ClCompile Include="..\lib\tigr.c">
       <Filter>Libs</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Vec2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Engine.h">
@@ -34,6 +37,12 @@
     </ClInclude>
     <ClInclude Include="..\lib\tigr.h">
       <Filter>Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ecs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Vec2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
