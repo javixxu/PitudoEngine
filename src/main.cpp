@@ -15,7 +15,7 @@ int main(){
 	if (L == NULL)
 		return -1;
 	luaL_openlibs(L);
-	luaL_loadstring(L, "print 'hello world'");
+	luaL_loadstring(L, "print 'Initializing Lua'");
 	lua_call(L, 0, 0);
 	lua_close(L);
 	//TEMPORAL SE QUITARA

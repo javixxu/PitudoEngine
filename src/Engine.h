@@ -4,6 +4,7 @@
 
 struct Tigr;
 class Vec2;
+class Sprite;
 
 namespace PitudoEngine {
 
@@ -14,7 +15,10 @@ namespace PitudoEngine {
 		bool m_bIsRunning = false;
 
 		float m_deltaTime;
-		float fps = 60; //FPS: MOTOR
+		float fps = 30; //FPS: MOTOR
+
+		Sprite* sprite;
+
 
 		void Input();
 		void Update();
@@ -25,6 +29,7 @@ namespace PitudoEngine {
 
 	public:
 		bool Init();
+		void SetUp();
 		void Run();
 		bool Quit();
 		bool getIsRunning() const;

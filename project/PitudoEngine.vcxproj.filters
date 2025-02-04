@@ -48,6 +48,9 @@
     <ClCompile Include="..\lib\minilua\minilua.c">
       <Filter>Libs\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Engine.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="..\lib\minilua\minilua.h">
       <Filter>Libs\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Sprite.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
