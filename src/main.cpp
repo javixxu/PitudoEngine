@@ -2,11 +2,24 @@
 //
 //main-cpp_ Defines ...
 #include <iostream>
+
 #include "Engine.h"
 
-int main()
-{
+#include <minilua/minilua.h>
+
+int main(){
 	PitudoEngine::Engine engine;
+
+	//TEMPORAL SE QUITARA
+	lua_State* L = luaL_newstate();
+	if (L == NULL)
+		return -1;
+	luaL_openlibs(L);
+	luaL_loadstring(L, "print 'hello world'");
+	lua_call(L, 0, 0);
+	lua_close(L);
+	//TEMPORAL SE QUITARA
+
 	if (!engine.Init()) return -1;
 	
 	engine.Run();

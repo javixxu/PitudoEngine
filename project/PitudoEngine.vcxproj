@@ -19,14 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\lib\minilua\minilua.c" />
+    <ClCompile Include="..\lib\pugixml\pugixml.cpp" />
     <ClCompile Include="..\lib\tigr.c" />
     <ClCompile Include="..\Src\Engine.cpp" />
     <ClCompile Include="..\Src\main.cpp" />
     <ClCompile Include="..\src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\lib\ecs\ecs.h" />
+    <ClInclude Include="..\lib\minilua\minilua.h" />
+    <ClInclude Include="..\lib\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\lib\pugixml\pugixml.hpp" />
     <ClInclude Include="..\lib\tigr.h" />
-    <ClInclude Include="..\src\ecs.h" />
     <ClInclude Include="..\Src\Engine.h" />
     <ClInclude Include="..\src\Vec2.h" />
   </ItemGroup>

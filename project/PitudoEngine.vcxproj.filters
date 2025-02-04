@@ -16,6 +16,18 @@
     <Filter Include="Libs">
       <UniqueIdentifier>{bef50740-3304-4b3f-95d4-e77cd0d037b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libs\PugiXML">
+      <UniqueIdentifier>{b9ade822-3a6a-48fc-b32c-1745bfc7fce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\ecs">
+      <UniqueIdentifier>{c38c61dc-0f9e-4431-a570-10df73821a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\Tigr">
+      <UniqueIdentifier>{3212fdd8-4d86-4b8c-976c-f80496e1ed51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\Lua">
+      <UniqueIdentifier>{ad4e27de-233b-4b0b-a910-e8f83aff1b2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Engine.cpp">
@@ -24,25 +36,40 @@
     <ClCompile Include="..\Src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\tigr.c">
-      <Filter>Libs</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Vec2.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\tigr.c">
+      <Filter>Libs\Tigr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\pugixml\pugixml.cpp">
+      <Filter>Libs\PugiXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\minilua\minilua.c">
+      <Filter>Libs\Lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\tigr.h">
-      <Filter>Libs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ecs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Vec2.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\ecs\ecs.h">
+      <Filter>Libs\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\tigr.h">
+      <Filter>Libs\Tigr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\pugixml\pugiconfig.hpp">
+      <Filter>Libs\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\pugixml\pugixml.hpp">
+      <Filter>Libs\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\minilua\minilua.h">
+      <Filter>Libs\Lua</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

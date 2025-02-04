@@ -4,7 +4,8 @@
 #include <tigr.h>
 #include "Vec2.h"
 
-#include "ecs.h"
+#include <ecs/ecs.h>
+#include <pugixml/pugixml.hpp>
 
 namespace PitudoEngine {
     bool Engine::Init(){
@@ -50,7 +51,7 @@ namespace PitudoEngine {
 
     void Engine::printText(const std::string& text,Vec2 pos)
     {
-        tigrPrint(m_screen, tfont, pos.x, pos.y, tigrRGB(0xff, 0xff, 0xff), text.c_str());
+        tigrPrint(m_screen, tfont, (int)pos.x, (int)pos.y, tigrRGB(0xff, 0xff, 0xff), text.c_str());
     }
 
     void Engine::Input(){
