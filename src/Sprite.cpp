@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include <fstream>
-#include <tigr.h>
+#include <tigr/tigr.h>
 #include <pugixml/pugixml.hpp>
 
 #include "Vec2.h"
@@ -56,7 +56,6 @@ Sprite::Sprite(): position(), texture_file("")
 }
 
 Sprite::Sprite(const std::string& fileName):Sprite(){
-	image = tigrLoadImage(fileName.c_str());
 	texture_file = fileName;
 }
 

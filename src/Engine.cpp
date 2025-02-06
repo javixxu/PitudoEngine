@@ -1,12 +1,24 @@
 #include "Engine.h"
 #include <iostream>
 
-#include <tigr.h>
+#include <tigr/tigr.h>
 #include <ecs/ecs.h>
 #include <pugixml/pugixml.hpp>
 
+
+
 #include "Sprite.h"
 #include "Vec2.h"
+
+
+//sYSTEM -> LALMA A TODOS LOS COMPONENTES DE ESE SIUSTEMA
+//ENTIDAD CONTENEDORA DE  COMPONENTES
+// SYS BASICOS:
+//  -render
+//  -collider
+//  -input
+//  -transform
+// LUA CREA ENTIDADES Y COMPONENTES pero como ejemplo ?¿
 
 namespace PitudoEngine {
     bool Engine::Init(){
@@ -92,11 +104,9 @@ namespace PitudoEngine {
     void Engine::Update(){
         //Input
         Input();
-
         //Logica
-
+        
         //Collisiones
-
     }
     void Engine::Render(){
         //CLEAR BUFFER

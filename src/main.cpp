@@ -7,6 +7,9 @@
 
 #include <minilua/minilua.h>
 
+#include <sol/forward.hpp>
+#include <sol/sol.hpp>
+
 int main(){
 	PitudoEngine::Engine engine;
 
