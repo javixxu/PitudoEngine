@@ -28,6 +28,9 @@
     <Filter Include="Libs\Lua">
       <UniqueIdentifier>{ad4e27de-233b-4b0b-a910-e8f83aff1b2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libs\Sol">
+      <UniqueIdentifier>{7bcef406-fd94-4595-8725-f94c4fcfda96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Engine.cpp">
@@ -76,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="..\src\Sprite.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\sol\config.hpp">
+      <Filter>Libs\Sol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\sol\forward.hpp">
+      <Filter>Libs\Sol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\sol\sol.hpp">
+      <Filter>Libs\Sol</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

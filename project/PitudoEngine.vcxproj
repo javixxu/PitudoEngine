@@ -32,6 +32,9 @@
     <ClInclude Include="..\lib\minilua\minilua.h" />
     <ClInclude Include="..\lib\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\lib\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\lib\sol\config.hpp" />
+    <ClInclude Include="..\lib\sol\forward.hpp" />
+    <ClInclude Include="..\lib\sol\sol.hpp" />
     <ClInclude Include="..\lib\tigr.h" />
     <ClInclude Include="..\Src\Engine.h" />
     <ClInclude Include="..\src\Sprite.h" />
