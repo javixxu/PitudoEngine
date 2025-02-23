@@ -15,10 +15,9 @@ namespace PitudoEngine {
 		bool m_bIsRunning = false;
 
 		float m_deltaTime;
-		float fps = 30; //FPS: MOTOR
+		float fps = 144; //FPS: MOTOR
 
 		Sprite* sprite;
-
 
 		void Input();
 		void Update();

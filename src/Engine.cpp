@@ -18,7 +18,7 @@
 //  -collider
 //  -input
 //  -transform
-// LUA CREA ENTIDADES Y COMPONENTES pero como ejemplo ?¿
+
 
 namespace PitudoEngine {
     bool Engine::Init(){
@@ -32,8 +32,6 @@ namespace PitudoEngine {
         sprite = new Sprite();
         std::string x("../data/safe.xml");
         Sprite::Load(x, *sprite);
-       
-       
     }
 
     void Engine::Run(){
@@ -48,7 +46,7 @@ namespace PitudoEngine {
 
             initTime += tigrTime();
             if (initTime - prevFrameTime < mustDelta) {
-                float elpased= Wait((mustDelta - (initTime - prevFrameTime))*1000.0f);
+                float elpased= Wait((mustDelta - (initTime - prevFrameTime)) * 1000.0f);
                 initTime += elpased;
             }
             m_deltaTime = initTime - prevFrameTime;

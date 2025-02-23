@@ -31,6 +31,18 @@
     <Filter Include="Libs\Sol">
       <UniqueIdentifier>{7bcef406-fd94-4595-8725-f94c4fcfda96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Componets">
+      <UniqueIdentifier>{69a01004-30f5-4663-974d-b886028bd16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Componets">
+      <UniqueIdentifier>{97767156-5e09-421f-939d-1b8870f125d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{93f8eabb-a860-4df1-8587-6428f6f0160c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{4c783831-87b2-4e97-8924-eab9e8769270}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Engine.cpp">
@@ -48,14 +60,20 @@
     <ClCompile Include="..\lib\minilua\minilua.c">
       <Filter>Libs\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\lib\tigr\tigr.c">
       <Filter>Libs\Tigr</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Transform.cpp">
+      <Filter>Source Files\Componets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Sprite.cpp">
+      <Filter>Source Files\Componets</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\InputSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\InputComponent.cpp">
+      <Filter>Source Files\Componets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +95,6 @@
     <ClInclude Include="..\lib\minilua\minilua.h">
       <Filter>Libs\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\lib\sol\config.hpp">
       <Filter>Libs\Sol</Filter>
     </ClInclude>
@@ -92,8 +107,20 @@
     <ClInclude Include="..\lib\tigr\tigr.h">
       <Filter>Libs\Tigr</Filter>
     </ClInclude>
+    <ClInclude Include="..\lib\ecs\ecsUtils.h">
+      <Filter>Libs\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Transform.h">
+      <Filter>Header Files\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Sprite.h">
+      <Filter>Header Files\Componets</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\InputSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\InputComponent.h">
+      <Filter>Header Files\Componets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

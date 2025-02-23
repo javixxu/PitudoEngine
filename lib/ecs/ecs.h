@@ -1,8 +1,9 @@
 #pragma once
 #include <map>
 #include <set>
+#include <ecs/ecsUtils.h>
 
-template<typename T, int NAME> struct component { T value_type; };
+template<typename T, ComponentType NAME> struct component { T value_type; };
 
 template<typename T> std::map< unsigned, T >& components() {
     static std::map< unsigned, T > objects; return objects;
