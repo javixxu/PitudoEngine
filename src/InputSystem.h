@@ -1,5 +1,5 @@
 #pragma once
-#include <my_ecs/System.h>
+#include <ecs/System.h>
 class Vec2;
 struct Tigr;
 

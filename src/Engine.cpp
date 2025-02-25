@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <tigr/tigr.h>
-#include <ecs/ecs.h>
 #include <pugixml/pugixml.hpp>
 
 

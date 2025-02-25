@@ -40,7 +40,7 @@
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{4c783831-87b2-4e97-8924-eab9e8769270}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Libs\MY_ECS">
+    <Filter Include="Libs\ecs">
       <UniqueIdentifier>{ce9a6b81-aeac-452a-a786-2ea7e318ddf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -75,14 +75,14 @@
     <ClCompile Include="..\src\InputComponent.cpp">
       <Filter>Source Files\Componets</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\my_ecs\ComponentManager.cpp">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClCompile Include="..\lib\ecs\ComponentManager.cpp">
+      <Filter>Libs\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\my_ecs\ECSManager.cpp">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClCompile Include="..\lib\ecs\ECSManager.cpp">
+      <Filter>Libs\ecs</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\my_ecs\EntityManager.cpp">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClCompile Include="..\lib\ecs\EntityManager.cpp">
+      <Filter>Libs\ecs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,26 +125,26 @@
     <ClInclude Include="..\src\InputComponent.h">
       <Filter>Header Files\Componets</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\ComponentManager.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\ComponentManager.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\ecsDefinitions.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\ecsDefinitions.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\ECSManager.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\ECSManager.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\EntityManager.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\EntityManager.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\IComponentArray.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\IComponentArray.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\System.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\System.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\my_ecs\SystemManager.h">
-      <Filter>Libs\MY_ECS</Filter>
+    <ClInclude Include="..\lib\ecs\SystemManager.h">
+      <Filter>Libs\ecs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

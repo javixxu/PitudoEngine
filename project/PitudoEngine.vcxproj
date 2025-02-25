@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\lib\ecs\ComponentManager.cpp" />
+    <ClCompile Include="..\lib\ecs\ECSManager.cpp" />
+    <ClCompile Include="..\lib\ecs\EntityManager.cpp" />
     <ClCompile Include="..\lib\minilua\minilua.c" />
-    <ClCompile Include="..\lib\my_ecs\ComponentManager.cpp" />
-    <ClCompile Include="..\lib\my_ecs\ECSManager.cpp" />
-    <ClCompile Include="..\lib\my_ecs\EntityManager.cpp" />
     <ClCompile Include="..\lib\pugixml\pugixml.cpp" />
     <ClCompile Include="..\lib\tigr\tigr.c" />
     <ClCompile Include="..\Src\Engine.cpp" />
@@ -34,14 +34,14 @@
     <ClCompile Include="..\src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\lib\ecs\ComponentManager.h" />
+    <ClInclude Include="..\lib\ecs\ecsDefinitions.h" />
+    <ClInclude Include="..\lib\ecs\ECSManager.h" />
+    <ClInclude Include="..\lib\ecs\EntityManager.h" />
+    <ClInclude Include="..\lib\ecs\IComponentArray.h" />
+    <ClInclude Include="..\lib\ecs\System.h" />
+    <ClInclude Include="..\lib\ecs\SystemManager.h" />
     <ClInclude Include="..\lib\minilua\minilua.h" />
-    <ClInclude Include="..\lib\my_ecs\ComponentManager.h" />
-    <ClInclude Include="..\lib\my_ecs\ecsDefinitions.h" />
-    <ClInclude Include="..\lib\my_ecs\ECSManager.h" />
-    <ClInclude Include="..\lib\my_ecs\EntityManager.h" />
-    <ClInclude Include="..\lib\my_ecs\IComponentArray.h" />
-    <ClInclude Include="..\lib\my_ecs\System.h" />
-    <ClInclude Include="..\lib\my_ecs\SystemManager.h" />
     <ClInclude Include="..\lib\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\lib\pugixml\pugixml.hpp" />
     <ClInclude Include="..\lib\sol\config.hpp" />
