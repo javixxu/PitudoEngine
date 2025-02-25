@@ -19,9 +19,6 @@
     <Filter Include="Libs\PugiXML">
       <UniqueIdentifier>{b9ade822-3a6a-48fc-b32c-1745bfc7fce1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Libs\ecs">
-      <UniqueIdentifier>{c38c61dc-0f9e-4431-a570-10df73821a3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Libs\Tigr">
       <UniqueIdentifier>{3212fdd8-4d86-4b8c-976c-f80496e1ed51}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{4c783831-87b2-4e97-8924-eab9e8769270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\MY_ECS">
+      <UniqueIdentifier>{ce9a6b81-aeac-452a-a786-2ea7e318ddf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +75,15 @@
     <ClCompile Include="..\src\InputComponent.cpp">
       <Filter>Source Files\Componets</Filter>
     </ClCompile>
+    <ClCompile Include="..\lib\my_ecs\ComponentManager.cpp">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\my_ecs\ECSManager.cpp">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\my_ecs\EntityManager.cpp">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Engine.h">
@@ -82,9 +91,6 @@
     </ClInclude>
     <ClInclude Include="..\src\Vec2.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lib\ecs\ecs.h">
-      <Filter>Libs\ecs</Filter>
     </ClInclude>
     <ClInclude Include="..\lib\pugixml\pugiconfig.hpp">
       <Filter>Libs\PugiXML</Filter>
@@ -107,9 +113,6 @@
     <ClInclude Include="..\lib\tigr\tigr.h">
       <Filter>Libs\Tigr</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\ecs\ecsUtils.h">
-      <Filter>Libs\ecs</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Transform.h">
       <Filter>Header Files\Componets</Filter>
     </ClInclude>
@@ -121,6 +124,27 @@
     </ClInclude>
     <ClInclude Include="..\src\InputComponent.h">
       <Filter>Header Files\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\ComponentManager.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\ecsDefinitions.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\ECSManager.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\EntityManager.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\IComponentArray.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\System.h">
+      <Filter>Libs\MY_ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\my_ecs\SystemManager.h">
+      <Filter>Libs\MY_ECS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

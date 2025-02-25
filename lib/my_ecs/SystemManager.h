@@ -1,14 +1,14 @@
+#pragma once
+#include "ecsDefinitions.h"
 #include <memory>
 #include <unordered_map>
 
-#include "ecsDefinitions.h"
 #include "System.h"
 
 class SystemManager{
 public:
 	template<typename T>
-	std::shared_ptr<T> RegisterSystem()
-	{
+	std::shared_ptr<T> RegisterSystem(){
 		const char* typeName = typeid(T).name();
 
 		assert(mSystems.find(typeName) == mSystems.end() && "Registering system more than once.");
@@ -20,8 +20,7 @@ public:
 	}
 
     template<typename T>
-	void SetSignature(Signature signature)
-	{
+	void SetSignature(Signature signature){
 		const char* typeName = typeid(T).name();
 
 		assert(mSystems.find(typeName) != mSystems.end() && "System used before registered.");
@@ -30,8 +29,7 @@ public:
 		mSignatures.insert({typeName, signature});
 	}
 
-    void EntityDestroyed(Entity entity)
-    {
+    void EntityDestroyed(Entity entity){
 		// Erase a destroyed entity from all system lists
 		// mEntities is a set so no check needed
 		for (auto const& pair : mSystems)
@@ -42,8 +40,7 @@ public:
 		}
 	};
 
-    void EntitySignatureChanged(Entity entity, Signature entitySignature)
-    {
+    void EntitySignatureChanged(Entity entity, Signature entitySignature){
 		// Notify each system that an entity's signature changed
 		for (auto const& pair : mSystems)
 		{

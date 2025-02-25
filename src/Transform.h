@@ -1,12 +1,10 @@
 #pragma once
-#include <ecs/ecs.h>
+
 #include <vector>
-
 #include "Vec2.h"
-#include <ecs/ecsUtils.h>
 
-class Transform
-{
+
+class Transform{
 public:
 
     Transform* parent = nullptr;   // Transformacion padre
@@ -25,6 +23,4 @@ public:
     void SetParent(Transform* newParent);
     void RemoveChild(Transform* child);       
 };
-
-using TRANSFORM = component< Transform, ComponentType::cType_Transform >;
 

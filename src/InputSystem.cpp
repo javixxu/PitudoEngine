@@ -1,5 +1,5 @@
 #include "InputSystem.h"
-
+#include "Vec2.h"
 #include <tigr/tigr.h>
 
 void InputSystem::Update(float _deltaTime){
