@@ -5,7 +5,7 @@ struct Tigr;
 
 class InputSystem: public System{
 	Tigr* m_screen;
-	int mouseX = 0, mouseY = 0;   // Pos del mouse
+	int m_mouseX = 0, m_mouseY = 0;   // Pos del mouse
 
 public:
 	InputSystem(Tigr* _screen);

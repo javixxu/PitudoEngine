@@ -10,6 +10,12 @@
 #include <sol/forward.hpp>
 #include <sol/sol.hpp>
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+
+
 int main(){
 	PitudoEngine::Engine engine;
 
@@ -28,6 +34,9 @@ int main(){
 	engine.Run();
 
 	if (!engine.Quit()) return -1;
+
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }

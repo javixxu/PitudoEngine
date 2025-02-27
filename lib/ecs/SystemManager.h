@@ -60,6 +60,11 @@ public:
 			}
 		}
 	};
+	void UpdateSystems(float deltaTime) {
+		for (auto& sys : mSystems) {
+			sys.second->Update(deltaTime);
+		}
+	}
 
 private:
     // Map from system type string pointer to a signature

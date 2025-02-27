@@ -4,7 +4,7 @@
 
 void InputSystem::Update(float _deltaTime){
 
-	tigrMouse(m_screen, &mouseX, &mouseY,nullptr);
+	tigrMouse(m_screen, &m_mouseX, &m_mouseY,nullptr);
 }
 
 InputSystem::InputSystem(Tigr* _screen):m_screen(_screen){
@@ -19,5 +19,5 @@ bool InputSystem::isKeyPressed(int _key){
 }
 
 Vec2 InputSystem::mousePosition(){
-	return {(float)mouseX,(float)mouseY};
+	return {(float)m_mouseX,(float)m_mouseY};
 }

@@ -5,23 +5,6 @@
 #include "Vec2.h"
 struct Tigr;
 
-//class Texture{
-//private:
-//	int width;
-//	int height;
-//	int channels;
-//	std::vector<uint32_t> pixels;
-//public:
-//	Texture(int w, int h);
-//	Texture(const std::string& fileName);
-//	~Texture();
-//
-//	void Draw(Tigr* dst_surface, Vec2 pos);
-//
-//	static bool Load(std::string& fileName,const Texture& tex);
-//	static bool Save(std::string& fileName,const Texture& tex);
-//};
-
 class Sprite {
 	Tigr* image = NULL;
 protected:

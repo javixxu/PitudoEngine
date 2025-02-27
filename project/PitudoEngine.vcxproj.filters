@@ -72,9 +72,6 @@
     <ClCompile Include="..\src\InputSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\InputComponent.cpp">
-      <Filter>Source Files\Componets</Filter>
-    </ClCompile>
     <ClCompile Include="..\lib\ecs\ComponentManager.cpp">
       <Filter>Libs\ecs</Filter>
     </ClCompile>
@@ -82,6 +79,15 @@
       <Filter>Libs\ecs</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\ecs\EntityManager.cpp">
+      <Filter>Libs\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RenderSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\ecs\System.cpp">
       <Filter>Libs\ecs</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,9 +128,6 @@
     <ClInclude Include="..\src\InputSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\InputComponent.h">
-      <Filter>Header Files\Componets</Filter>
-    </ClInclude>
     <ClInclude Include="..\lib\ecs\ComponentManager.h">
       <Filter>Libs\ecs</Filter>
     </ClInclude>
@@ -146,5 +149,19 @@
     <ClInclude Include="..\lib\ecs\SystemManager.h">
       <Filter>Libs\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="..\lib\ecs\Component.h">
+      <Filter>Libs\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\RenderSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\data\safe.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

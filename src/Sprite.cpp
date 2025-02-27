@@ -5,52 +5,6 @@
 
 #include "Vec2.h"
 
-//Texture::Texture(int w, int h){
-//}
-//
-//Texture::Texture(const std::string& fileName){
-//}
-//
-//Texture::~Texture(){
-//}
-//
-//void Texture::Draw(Tigr* window,Vec2 pos){
-//	Tigr* temp = tigrBitmap(width, height);
-//	if (temp) {
-//		memccpy(temp->pix, pixels.data(),0,
-//			width * height * channels);
-//
-//		int dx = 0, dy = 0;
-//		int sx = 0, sy = 0;
-//
-//		tigrBlit(window, temp, dx, dy, sx, sy, width, height);
-//
-//		tigrFree(temp);
-//	}
-//}
-//
-//bool Texture::Save(std::string& fileName, const Texture& tex){
-//	pugi::xml_document doc;
-//	pugi::xml_node node = doc.child("texture");
-//
-//	node.attribute("width").set_value(tex.width);
-//	node.attribute("height").set_value(tex.height);
-//	node.attribute("channels").set_value(tex.channels);
-//	node.attribute("pixels").set_value(tex.pixels.data());
-//
-//	try {
-//		//TO DO::
-//		std::stringstream ss;
-//		doc.save(ss);
-//		std::string out = ss.str();
-//
-//		return true;
-//	}
-//	catch (...) {
-//		return false;
-//	}
-//}
-
 Sprite::Sprite(): position(), texture_file("")
 {
 }

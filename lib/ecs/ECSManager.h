@@ -69,6 +69,10 @@ public:
 		mSystemManager->SetSignature<T>(signature);
 	}
 
+	void UpdateSystems(float deltaTime) {
+		mSystemManager->UpdateSystems(deltaTime);
+	}
+
 private:
 	ECSManager() = default;
 

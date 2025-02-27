@@ -4,13 +4,16 @@
 #include <tigr/tigr.h>
 #include <pugixml/pugixml.hpp>
 
+#include <ecs/ECSManager.h>
 
-
-#include "Sprite.h"
 #include "Vec2.h"
 
+#include "Transform.h"
+#include "MSprite.h"
+#include "RenderSystem.h"
 
-//sYSTEM -> LALMA A TODOS LOS COMPONENTES DE ESE SIUSTEMA
+
+//sYSTEM -> LALMA A TODOS LOS COMPONENTES DE ESE SISTEMA
 //ENTIDAD CONTENEDORA DE  COMPONENTES
 // SYS BASICOS:
 //  -render
@@ -24,13 +27,34 @@ namespace PitudoEngine {
         m_bIsRunning = true;
         m_screen = tigrWindow(320, 240, "Hello", 0);
         std::cout << "Initializing Tiger\n";
+
+        ecsManager = &ECSManager::getInstance();
+        ecsManager->Init();
+
         return !!m_screen;// conv a explicito
     }
 
     void Engine::SetUp(){
-        sprite = new Sprite();
+        ecsManager->RegisterComponent<Transform>();
+        ecsManager->RegisterComponent<MSprite>();
+
+        auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
+        renderSystem->setContext(m_screen);
+
+        Signature signature;
+        signature.set(ecsManager->GetComponentType<Transform>());
+        signature.set(ecsManager->GetComponentType<MSprite>());
+        ecsManager->SetSystemSignature<RenderSystem>(signature);
+
+        auto entity = ecsManager->CreateEntity();
+
+        ecsManager->AddComponent(entity, Transform({-40,-140}, {1,1}, 0.0f));
+        ecsManager->AddComponent(entity, MSprite("../data/mrkrabs.png"));
+
+        //sprite = new Sprite();
         std::string x("../data/safe.xml");
-        Sprite::Load(x, *sprite);
+        x += "sdfds";
+        //Sprite::Load(x, *sprite);
     }
 
     void Engine::Run(){
@@ -63,8 +87,8 @@ namespace PitudoEngine {
     bool Engine::Quit(){
         //to do:: QUITAR
         std::string x("../data/safe.xml");
-        Sprite::Save(x, *sprite);
-        delete sprite;
+        //Sprite::Save(x, *sprite);
+        //delete sprite;
         //to do:: QUITAR
 
         tigrFree(m_screen);
@@ -85,24 +109,22 @@ namespace PitudoEngine {
         m_bIsRunning = !tigrClosed(m_screen) && !tigrKeyDown(m_screen, TK_ESCAPE);
 
         if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_RIGHT)) {
-            sprite->setPosition(sprite->getPosition() + Vec2(10, 0));
+            //sprite->setPosition(sprite->getPosition() + Vec2(10, 0));
         }
         if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_LEFT)) {
-            sprite->setPosition(sprite->getPosition() + Vec2(-10, 0));
+            //sprite->setPosition(sprite->getPosition() + Vec2(-10, 0));
         }
         if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_UP)) {
-            sprite->setPosition(sprite->getPosition() + Vec2(0, -10));
+            //sprite->setPosition(sprite->getPosition() + Vec2(0, -10));
         }
         if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_DOWN)) {
-            sprite->setPosition(sprite->getPosition() + Vec2(0, 10));
+            //sprite->setPosition(sprite->getPosition() + Vec2(0, 10));
         }
     }
 
     void Engine::Update(){
         //Input
-        Input();
-        //Logica
-        
+        //ecsManager->UpdateSystems(m_deltaTime);
         //Collisiones
     }
     void Engine::Render(){
@@ -110,7 +132,7 @@ namespace PitudoEngine {
         tigrClear(m_screen, tigrRGB(0x80, 0x90, 0xa0)); 
 
         //CONTENT QUE RENDERIZAR
-        sprite->Draw(m_screen);
+        //sprite->Draw(m_screen);
 
         #ifdef _DEBUG
                 RenderDebug();

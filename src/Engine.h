@@ -5,12 +5,14 @@
 struct Tigr;
 class Vec2;
 class Sprite;
+class ECSManager;
 
 namespace PitudoEngine {
 
 	class Engine{
 	private:
 		Tigr* m_screen;
+		ECSManager* ecsManager;
 
 		bool m_bIsRunning = false;
 
