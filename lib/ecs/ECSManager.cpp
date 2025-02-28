@@ -7,6 +7,12 @@ void ECSManager::Init(){
     mSystemManager = std::make_unique<SystemManager>();
 }
 
+void ECSManager::Close(){
+    mComponentManager.reset();
+    mEntityManager.reset();
+    mSystemManager.reset();
+}
+
 
 // Entity methods
 Entity ECSManager::CreateEntity(){

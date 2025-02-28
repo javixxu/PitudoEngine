@@ -17,6 +17,11 @@ public:
 	MSprite(const std::string& fileName, Vec2 sourceCoords = Vec2());
 	~MSprite();
 
+	MSprite(const MSprite& other) = default;
+	MSprite(MSprite&& other) = default;
+	MSprite& operator=(const MSprite& other) = default;
+	MSprite& operator=(MSprite&& other) = default;
+
 	void Draw(Tigr* window, const Vec2& pos) const;
 	void ChangeTexture(const std::string& fileName);
 

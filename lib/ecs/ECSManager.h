@@ -16,6 +16,7 @@ public:
 
 
     void Init();
+	void Close();
     Entity CreateEntity();
     void DestroyEntity(Entity entity);
 
@@ -26,8 +27,8 @@ public:
 	}
 
 	template<typename T>
-	void AddComponent(Entity entity, T component){
-		mComponentManager->AddComponent<T>(entity, component);
+	void AddComponent(Entity entity, T&& component){
+		mComponentManager->AddComponent<T>(entity, std::forward<T>(component));
 
 		auto signature = mEntityManager->GetSignature(entity);
 		signature.set(mComponentManager->GetComponentType<T>(), true);

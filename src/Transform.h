@@ -20,6 +20,11 @@ public:
     Transform() = default;
     Transform(const Vec2& pos, const Vec2& sc, float rot);
 
+    Transform(const Transform& other) = default;
+    Transform(Transform&& other) = default;
+    Transform& operator=(const Transform& other) = default;
+    Transform& operator=(Transform&& other) = default;
+
     void SetParent(Transform* newParent);
     void RemoveChild(Transform* child);       
 };

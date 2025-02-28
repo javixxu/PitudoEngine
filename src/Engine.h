@@ -23,10 +23,10 @@ namespace PitudoEngine {
 
 		void Input();
 		void Update();
-		void Render();
+		//void Render();
 
 		float Wait(float ms);
-		void RenderDebug();
+		//void RenderDebug();
 
 	public:
 		bool Init();
@@ -43,7 +43,7 @@ namespace PitudoEngine {
 			return sstr.str();
 		}
 
-		void printText(const std::string& text,Vec2 pos);
+		static void printText(Tigr* screen,const std::string& text,Vec2 pos);
 
 		static void logme(const std::string& text);
 	};

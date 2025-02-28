@@ -31,9 +31,9 @@ public:
 	}
 
     template<typename T>
-	void AddComponent(Entity entity, T component){
+	void AddComponent(Entity entity, T&& component){
 		// Add a component to the array for an entity
-		GetComponentArray<T>()->InsertData(entity, component);
+		GetComponentArray<T>()->InsertData(entity, std::forward<T>(component));
 	}
 
 	template<typename T>

@@ -16,8 +16,19 @@ public:
 template<typename T>
 class ComponentArray : public IComponentArray{
 public:
-    void InsertData(Entity entity, T component){
+    void InsertData(Entity entity, T&& component){
         assert(mEntityToIndexMap.find(entity) == mEntityToIndexMap.end() && "Component added to same entity more than once.");
+
+		// Put new entry at end and update the maps
+		size_t newIndex = mSize;
+		mEntityToIndexMap[entity] = newIndex;
+		mIndexToEntityMap[newIndex] = entity;
+		mComponentArray[newIndex] = std::move(component);
+		++mSize;
+    };
+
+	void InsertData(Entity entity, T& component) {
+		assert(mEntityToIndexMap.find(entity) == mEntityToIndexMap.end() && "Component added to same entity more than once.");
 
 		// Put new entry at end and update the maps
 		size_t newIndex = mSize;
@@ -25,7 +36,7 @@ public:
 		mIndexToEntityMap[newIndex] = entity;
 		mComponentArray[newIndex] = component;
 		++mSize;
-    };
+	};
 
     void RemoveData(Entity entity){
         assert(mEntityToIndexMap.find(entity) != mEntityToIndexMap.end() && "Removing non-existent component.");
