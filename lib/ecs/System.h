@@ -11,5 +11,7 @@ protected:
 public:
 	std::set<Entity> mEntities;
 	System();
+	virtual ~System() = default;
+
     virtual void Update(float deltaTime){};
 };

@@ -2,6 +2,7 @@
 #include <ecs/System.h>
 class Vec2;
 struct Tigr;
+
 namespace PitudoEngine {
 	class RenderSystem : public System {
 		Tigr* m_Window;

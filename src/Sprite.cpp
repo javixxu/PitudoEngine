@@ -7,51 +7,46 @@
 
 #include "Vec2.h"
 
-Sprite::Sprite():image(nullptr), sourceCoords(){
+Sprite::Sprite():image(nullptr), m_pivot(){
 }
 
-Sprite::Sprite(const std::string& fileName, Vec2 sourceCoords):image(nullptr), sourceCoords(){
+Sprite::Sprite(const std::string& fileName, Vec2 pivot):image(nullptr), m_pivot(pivot){
 	ChangeTexture(fileName);
 }
 
 Sprite::~Sprite(){
 	if(image)
 		tigrFree(image);
-	std::cout << "DESTRUCTORTA MSPRITE COMPONENT \n";
 }
 
-Sprite::Sprite(const Sprite& other)
-{
+Sprite::Sprite(const Sprite& other) noexcept{
 	*this = other;
 }
 
-Sprite::Sprite(Sprite&& other)
-{
+Sprite::Sprite(Sprite&& other) noexcept{
 	*this = std::move(other);
 }
 
-Sprite& Sprite::operator=(const Sprite& other)
-{
-	this->sourceCoords = other.sourceCoords;
+Sprite& Sprite::operator=(const Sprite& other) noexcept{
+	this->m_pivot = other.m_pivot;
 	this->ChangeTexture(other.texture_file);
-
 	return *this;
 }
 
-Sprite& Sprite::operator=(Sprite&& other)
-{
+Sprite& Sprite::operator=(Sprite&& other) noexcept{
 	this->image = other.image;
 	other.image = nullptr;
 
 	this->texture_file = other.texture_file;
-	this->sourceCoords = other.sourceCoords;
+	this->m_pivot = other.m_pivot;
 
 	return *this;
 }
 
-void Sprite::Draw(Tigr* window,const Vec2& pos) const{
+void Sprite::Draw(Tigr* window,const Vec2& pos, const Vec2& scale) const{
 	assert(image && "MSprite::Draw - Texture is nullptr!");
-	tigrBlit(window, image, pos.x, pos.y, sourceCoords.x, sourceCoords.y, image->w, image->h);
+
+	tigrBlit(window, image, (int)(pos.x - (image->w * m_pivot.x)), (int)(pos.y - (image->h * m_pivot.y)), 0,0, image->w, image->h);
 }
 
 void Sprite::ChangeTexture(const std::string& fileName){
@@ -62,8 +57,7 @@ void Sprite::ChangeTexture(const std::string& fileName){
 	image = tigrLoadImage(texture_file.c_str());
 }
 
-bool Sprite::Load(std::string& fileName, Sprite& obj)
-{
+bool Sprite::Load(std::string& fileName, Sprite& obj){
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(fileName.c_str());
 
@@ -76,21 +70,20 @@ bool Sprite::Load(std::string& fileName, Sprite& obj)
 		return false;
 	}
 
-	obj.sourceCoords.x = node.attribute("source_x").as_float();
-	obj.sourceCoords.y = node.attribute("source_y").as_float();
+	obj.m_pivot.x = node.attribute("source_x").as_float();
+	obj.m_pivot.y = node.attribute("source_y").as_float();
 
 	obj.ChangeTexture(node.attribute("texture_file").as_string());
 
 	return true;
 }
 
-bool Sprite::Save(std::string& fileName, const Sprite& obj)
-{
+bool Sprite::Save(std::string& fileName, const Sprite& obj){
 	pugi::xml_document doc;
 	pugi::xml_node node = doc.append_child("Sprite");
 
-	node.append_attribute("source_x").set_value(obj.sourceCoords.x);
-	node.append_attribute("source_y").set_value(obj.sourceCoords.y);
+	node.append_attribute("source_x").set_value(obj.m_pivot.x);
+	node.append_attribute("source_y").set_value(obj.m_pivot.y);
 	node.append_attribute("texture_file").set_value(obj.texture_file.c_str());
 
 	try {

@@ -2,31 +2,31 @@
 #include <iostream>
 
 #include <tigr/tigr.h>
-#include <pugixml/pugixml.hpp>
-
 #include <ecs/ECSManager.h>
 
 #include "Vec2.h"
 
+#include "RenderSystem.h"
+#include "InputSystem.h"
+
 #include "Transform.h"
 #include "Sprite.h"
-#include "RenderSystem.h"
+#include "Collider.h"
+
+/*
+        Input == DONE /(FALTA CLIKS RATON)
+        Update Sistemas 
+        Fisicas
+        Colliders   
+        Render == DONE
+*/
 
 
-//sYSTEM -> LALMA A TODOS LOS COMPONENTES DE ESE SISTEMA
-//ENTIDAD CONTENEDORA DE  COMPONENTES
-// SYS BASICOS:
-//  -render
-//  -collider
-//  -input
-//  -transform
-
-extern TigrFont* tfont;
 
 namespace PitudoEngine {
     bool Engine::Init(){
         m_bIsRunning = true;
-        m_screen = tigrWindow(320, 240, "PitudoEngine", 0);
+        m_screen = tigrWindow(800, 600, "PitudoEngine", 0);
         std::cout << "Initializing Tiger\n";
        
         ecsManager = &ECSManager::getInstance();
@@ -38,9 +38,14 @@ namespace PitudoEngine {
     void Engine::SetUp(){
         ecsManager->RegisterComponent<Transform>();
         ecsManager->RegisterComponent<Sprite>();
+        ecsManager->RegisterComponent<Collider>();
+
+        auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
+        inputSystem->setContext(m_screen); //PRIMERO EN REGISTRAR PUES ES EL INPUT
 
         auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
-        renderSystem->setContext(m_screen);
+        renderSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
+
 
         Signature signature;
         signature.set(ecsManager->GetComponentType<Transform>());
@@ -49,8 +54,11 @@ namespace PitudoEngine {
 
         auto entity = ecsManager->CreateEntity();
 
-        ecsManager->AddComponent<Transform>(entity, Vec2( - 40, -140 ), Vec2(1,1), 0.0f);
+        ecsManager->AddComponent<Transform>(entity, Vec2(400,300), Vec2(1,1), 0.0f);
         ecsManager->AddComponent<Sprite>(entity, "../data/mrkrabs.png");
+        ecsManager->AddComponent<Collider>(entity,&ecsManager->GetComponent<Transform>(entity),ColliderShape::RECT);
+        
+        ecsManager->GetComponent<Transform>(entity).scale = { 0.5f, 0.5f };
 
         //sprite = new Sprite();
         //std::string x("../data/safe.xml");
@@ -75,19 +83,15 @@ namespace PitudoEngine {
             m_deltaTime = initTime - prevFrameTime;
             prevFrameTime = initTime;
 
-            //Input & Logica & Collisiones
             Update();
-
-            //Renderizado
-            //Render();
         }
     }
 
     bool Engine::Quit(){
         //to do:: QUITAR
-        std::string x("../data/safe.xml");
-        //Sprite::Save(x, *sprite);
-        //delete sprite;
+            //std::string x("../data/safe.xml");
+            //Sprite::Save(x, *sprite);
+            //delete sprite;
         //to do:: QUITAR
 
         ecsManager->Close(); //CERRAR MANAGER
@@ -125,25 +129,9 @@ namespace PitudoEngine {
     }
 
     void Engine::Update(){
-        //Input
         Input();
         ecsManager->UpdateSystems(m_deltaTime);
-        //Collisiones
     }
-    //void Engine::Render(){
-    //    //CLEAR BUFFER
-    //    tigrClear(m_screen, tigrRGB(0x80, 0x90, 0xa0)); 
-
-    //    //CONTENT QUE RENDERIZAR
-    //    //sprite->Draw(m_screen);
-
-    //    #ifdef _DEBUG
-    //            //RenderDebug();
-    //    #endif // DEBUG
-
-    //    //ACTUALIZAR BUFFER
-    //    tigrUpdate(m_screen);
-    //}
 
     float Engine::Wait(float ms){
         float totalTimeWaited = 0.0f;
@@ -153,11 +141,6 @@ namespace PitudoEngine {
 
         return totalTimeWaited;
     }
-
-    /*void Engine::RenderDebug(){
-        printText("DeltaTime: " + sstr(m_deltaTime), {30,30});
-        printText("FPS: " + sstr(1.0 / m_deltaTime), {30,45});
-    }*/
 
     void Engine::logme(const std::string& text) {
         std::cout << text << "\n";

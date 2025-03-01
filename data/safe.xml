@@ -1,2 +1,12 @@
 <?xml version="1.0"?>
-<Sprite x="-40" y="-140" texture_file="../data/mrkrabs.png" />
+<Entities>
+	<Entity tag="player">
+		<Transform position_x="-40" position_y="-140" scale_x="1" scale_y="1" rotation="0" />
+		<Sprite source_x="-40" source_y="-140" texture_file="../data/mrkrabs.png" />
+	</Entity>
+	<Entity tag="enemy_1">
+		<Transform position_x="-40" position_y="-140" scale_x="1" scale_y="1" roation="0" />
+		<Sprite source_x="-40" source_y="-140" texture_file="../data/mrkrabs.png" />
+	</Entity>
+</Entities>
+

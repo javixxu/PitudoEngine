@@ -3,11 +3,16 @@
 #include <tigr/tigr.h>
 
 void InputSystem::Update(float _deltaTime){
+	tigrMouse(m_screen, &m_mouseX, &m_mouseY,&m_buttons);
 
-	tigrMouse(m_screen, &m_mouseX, &m_mouseY,nullptr);
+	//TO DO:: FALTAN METODOS PARA CLIKADO Y COSAS ASI
 }
 
-InputSystem::InputSystem(Tigr* _screen):m_screen(_screen){
+InputSystem::InputSystem():m_screen(nullptr),m_buttons(-1){
+}
+
+void InputSystem::setContext(Tigr* screen){
+	m_screen = screen;
 }
 
 bool InputSystem::isKeyDown(int _key){

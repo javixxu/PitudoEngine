@@ -25,7 +25,7 @@ namespace PitudoEngine {
 			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
 			auto& sprite = m_ecsManager->GetComponent<Sprite>(entity);
 
-			sprite.Draw(m_Window, transform.position);
+			sprite.Draw(m_Window, transform.position,transform.scale);
 		}
 
 	#ifdef _DEBUG
