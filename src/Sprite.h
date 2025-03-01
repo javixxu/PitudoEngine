@@ -1,29 +1,31 @@
 #pragma once
+#include <ecs/ecsDefinitions.h>
 #include <string>
 #include <vector>
 
-#include "Vec2.h"
+#include "Vec2.h";
+
 struct Tigr;
 
-class Sprite {
-	Tigr* image = NULL;
+class Sprite: public Component{
+	Tigr* image= nullptr;
 protected:
-	//Serial
-	Vec2 position;
 	std::string texture_file;
+	Vec2 sourceCoords;
 public:
 	Sprite();
-	Sprite(const std::string& fileName);
-	//Sprite(Vec2 _pos, Texture _tex);
+	Sprite(const std::string& fileName, Vec2 sourceCoords = Vec2());
 	~Sprite();
 
-	void ChangeTexture();
+	Sprite(const Sprite& other);
+	Sprite(Sprite&& other);
+	Sprite& operator=(const Sprite& other);
+	Sprite& operator=(Sprite&& other);
 
-	void setPosition(Vec2 pos);
-	Vec2 getPosition() const;
-	void Draw(Tigr* window) const;
+	void Draw(Tigr* window, const Vec2& pos) const;
+	void ChangeTexture(const std::string& fileName);
 
 	static bool Load(std::string& fileName, Sprite& obj);
 	static bool Save(std::string& fileName, const Sprite& obj);
-
 };
+

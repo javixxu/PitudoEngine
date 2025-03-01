@@ -10,6 +10,11 @@ EntityManager::EntityManager(){
     }
 }
 
+EntityManager::~EntityManager()
+{
+
+}
+
 Entity EntityManager::CreateEntity(){
     assert(mLivingEntityCount < MAX_ENTITIES && "Too many entities in existence.");
 

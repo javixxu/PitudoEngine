@@ -3,7 +3,7 @@
 #include <ecs/ECSManager.h>
 
 #include "Transform.h"
-#include "MSprite.h"
+#include "Sprite.h"
 #include "Engine.h"
 namespace PitudoEngine {
 	RenderSystem::RenderSystem() :m_Window(nullptr) {
@@ -23,7 +23,7 @@ namespace PitudoEngine {
 
 		for (auto& entity : mEntities) {
 			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
-			auto& sprite = m_ecsManager->GetComponent<MSprite>(entity);
+			auto& sprite = m_ecsManager->GetComponent<Sprite>(entity);
 
 			sprite.Draw(m_Window, transform.position);
 		}

@@ -1,10 +1,11 @@
 #pragma once
 
+#include <ecs/ecsDefinitions.h>
 #include <vector>
+
 #include "Vec2.h"
 
-
-class Transform{
+class Transform: public Component{
 public:
 
     Transform* parent = nullptr;   // Transformacion padre
@@ -19,6 +20,7 @@ public:
 
     Transform() = default;
     Transform(const Vec2& pos, const Vec2& sc, float rot);
+    ~Transform() = default;
 
     Transform(const Transform& other) = default;
     Transform(Transform&& other) = default;

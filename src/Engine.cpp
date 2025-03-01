@@ -9,7 +9,7 @@
 #include "Vec2.h"
 
 #include "Transform.h"
-#include "MSprite.h"
+#include "Sprite.h"
 #include "RenderSystem.h"
 
 
@@ -37,24 +37,23 @@ namespace PitudoEngine {
 
     void Engine::SetUp(){
         ecsManager->RegisterComponent<Transform>();
-        ecsManager->RegisterComponent<MSprite>();
+        ecsManager->RegisterComponent<Sprite>();
 
         auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
         renderSystem->setContext(m_screen);
 
         Signature signature;
         signature.set(ecsManager->GetComponentType<Transform>());
-        signature.set(ecsManager->GetComponentType<MSprite>());
+        signature.set(ecsManager->GetComponentType<Sprite>());
         ecsManager->SetSystemSignature<RenderSystem>(signature);
 
         auto entity = ecsManager->CreateEntity();
 
         ecsManager->AddComponent<Transform>(entity, Vec2( - 40, -140 ), Vec2(1,1), 0.0f);
-        ecsManager->AddComponent<MSprite>(entity, "../data/mrkrabs.png");
+        ecsManager->AddComponent<Sprite>(entity, "../data/mrkrabs.png");
 
         //sprite = new Sprite();
-        std::string x("../data/safe.xml");
-        x += "sdfds";
+        //std::string x("../data/safe.xml");
         //Sprite::Load(x, *sprite);
     }
 

@@ -14,3 +14,9 @@ const ComponentType MAX_COMPONENTS = 128;
 
 // A simple type alias
 using Signature = std::bitset<MAX_COMPONENTS>;
+
+class Component {
+public:
+    Component() {};
+    virtual ~Component() {};
+};
