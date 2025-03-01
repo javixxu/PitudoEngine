@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <cassert>
+#include <vector>
 #include "ecsDefinitions.h"
 
 // The one instance of virtual inheritance in the entire implementation.
@@ -18,7 +19,7 @@ class ComponentArray : public IComponentArray{
 public:
     void InsertData(Entity entity, T&& component){
         assert(mEntityToIndexMap.find(entity) == mEntityToIndexMap.end() && "Component added to same entity more than once.");
-
+		
 		// Put new entry at end and update the maps
 		size_t newIndex = mSize;
 		mEntityToIndexMap[entity] = newIndex;
@@ -72,11 +73,8 @@ public:
     };
 
 private:
-    // The packed array of components (of generic type T),
-	// set to a specified maximum amount, matching the maximum number
-	// of entities allowed to exist simultaneously, so that each entity
-	// has a unique spot.
-	std::array<T, MAX_ENTITIES> mComponentArray;
+
+	std::vector<T> mComponentArray = std::vector<T>(MAX_ENTITIES);
 
 	// Map from an entity ID to an array index.
 	std::unordered_map<Entity, size_t> mEntityToIndexMap;

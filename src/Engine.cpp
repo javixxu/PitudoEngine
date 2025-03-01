@@ -49,8 +49,8 @@ namespace PitudoEngine {
 
         auto entity = ecsManager->CreateEntity();
 
-        ecsManager->AddComponent(entity, Transform({-40,-140}, {1,1}, 0.0f));
-        ecsManager->AddComponent(entity, MSprite("../data/mrkrabs.png"));
+        ecsManager->AddComponent<Transform>(entity, Vec2( - 40, -140 ), Vec2(1,1), 0.0f);
+        ecsManager->AddComponent<MSprite>(entity, "../data/mrkrabs.png");
 
         //sprite = new Sprite();
         std::string x("../data/safe.xml");

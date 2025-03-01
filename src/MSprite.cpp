@@ -15,9 +15,38 @@ MSprite::MSprite(const std::string& fileName, Vec2 sourceCoords):image(nullptr),
 }
 
 MSprite::~MSprite(){
-	//if(image)
-		//tigrFree(image);
+	if(image)
+		tigrFree(image);
 	std::cout << "DESTRUCTORTA MSPRITE COMPONENT \n";
+}
+
+MSprite::MSprite(const MSprite& other)
+{
+	*this = other;
+}
+
+MSprite::MSprite(MSprite&& other)
+{
+	*this = std::move(other);
+}
+
+MSprite& MSprite::operator=(const MSprite& other)
+{
+	this->sourceCoords = other.sourceCoords;
+	this->ChangeTexture(other.texture_file);
+
+	return *this;
+}
+
+MSprite& MSprite::operator=(MSprite&& other)
+{
+	this->image = other.image;
+	other.image = nullptr;
+
+	this->texture_file = other.texture_file;
+	this->sourceCoords = other.sourceCoords;
+
+	return *this;
 }
 
 void MSprite::Draw(Tigr* window,const Vec2& pos) const{
@@ -27,7 +56,9 @@ void MSprite::Draw(Tigr* window,const Vec2& pos) const{
 
 void MSprite::ChangeTexture(const std::string& fileName){
 	texture_file = fileName;
-	if(image)tigrFree(image);
+	if(image)
+		tigrFree(image);
+
 	image = tigrLoadImage(texture_file.c_str());
 }
 

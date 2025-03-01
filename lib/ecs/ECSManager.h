@@ -26,12 +26,13 @@ public:
 		mComponentManager->RegisterComponent<T>();
 	}
 
-	template<typename T>
-	void AddComponent(Entity entity, T&& component){
-		mComponentManager->AddComponent<T>(entity, std::forward<T>(component));
+	template <typename TComponent, typename... TArgs>
+	void AddComponent(const Entity& entity, TArgs&&... args)
+	{
+		mComponentManager->AddComponent<TComponent>(entity, TComponent{ std::forward<TArgs>(args)... });
 
 		auto signature = mEntityManager->GetSignature(entity);
-		signature.set(mComponentManager->GetComponentType<T>(), true);
+		signature.set(mComponentManager->GetComponentType<TComponent>(), true);
 		mEntityManager->SetSignature(entity, signature);
 
 		mSystemManager->EntitySignatureChanged(entity, signature);
