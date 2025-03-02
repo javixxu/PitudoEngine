@@ -19,6 +19,11 @@ enum class ColliderShape {
     CIRCLE = 1
 };
 
+enum class CollisionType {
+    BLOCK = 0,
+    OVERLAP = 1
+};
+
 class Collider : public Component{
 protected:
     const Transform* m_transform;

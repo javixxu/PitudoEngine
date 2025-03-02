@@ -2,6 +2,7 @@
 #include <ecs/ecsDefinitions.h>
 #include <string>
 #include <vector>
+#include "Transform.h"
 #include "Vec2.h"
 
 struct Tigr;
@@ -11,9 +12,10 @@ class Sprite: public Component{
 protected:
 	std::string texture_file;
 	Vec2 m_pivot;
+	const Transform* m_transform;
 public:
 	Sprite();
-	Sprite(const std::string& fileName, Vec2 pivot = Vec2(0.5f));
+	Sprite(const Transform* transform, const std::string& fileName,  Vec2 pivot = Vec2(0.5f));
 	~Sprite();
 
 	Sprite(const Sprite& other) noexcept;
@@ -21,7 +23,7 @@ public:
 	Sprite& operator=(const Sprite& other) noexcept;
 	Sprite& operator=(Sprite&& other) noexcept;
 
-	void Draw(Tigr* window, const Vec2& pos, const Vec2& scale) const;
+	void Draw(Tigr* window) const;
 	void ChangeTexture(const std::string& fileName);
 
 	static bool Load(std::string& fileName, Sprite& obj);

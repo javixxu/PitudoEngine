@@ -55,10 +55,11 @@ namespace PitudoEngine {
         auto entity = ecsManager->CreateEntity();
 
         ecsManager->AddComponent<Transform>(entity, Vec2(400,300), Vec2(1,1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, "../data/mrkrabs.png");
-        ecsManager->AddComponent<Collider>(entity,&ecsManager->GetComponent<Transform>(entity),ColliderShape::RECT);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png");
+        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::RECT);
         
-        ecsManager->GetComponent<Transform>(entity).scale = { 0.5f, 0.5f };
+        Transform* trs = &ecsManager->GetComponent<Transform>(entity);
+        trs->scale = { 1.0f, 1.0f };
 
         //sprite = new Sprite();
         //std::string x("../data/safe.xml");

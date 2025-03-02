@@ -60,7 +60,6 @@ bool Collider::checkRectRect(const Vec2& rectPos1, const Vec2& rectSize1, const 
 
 
 
-
 Collider::Collider() :m_transform(nullptr),m_colliderShape(ColliderShape::RECT), m_pOffset(), m_Size(1) {
 }
 

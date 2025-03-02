@@ -7,10 +7,10 @@
 
 #include "Vec2.h"
 
-Sprite::Sprite():image(nullptr), m_pivot(){
+Sprite::Sprite():image(nullptr),m_transform(nullptr), m_pivot(){
 }
 
-Sprite::Sprite(const std::string& fileName, Vec2 pivot):image(nullptr), m_pivot(pivot){
+Sprite::Sprite(const Transform* transform,const std::string& fileName, Vec2 pivot):image(nullptr), m_pivot(pivot), m_transform(transform){
 	ChangeTexture(fileName);
 }
 
@@ -29,6 +29,7 @@ Sprite::Sprite(Sprite&& other) noexcept{
 
 Sprite& Sprite::operator=(const Sprite& other) noexcept{
 	this->m_pivot = other.m_pivot;
+	this->m_transform = other.m_transform;
 	this->ChangeTexture(other.texture_file);
 	return *this;
 }
@@ -37,16 +38,19 @@ Sprite& Sprite::operator=(Sprite&& other) noexcept{
 	this->image = other.image;
 	other.image = nullptr;
 
+	this->m_transform = other.m_transform;
+	other.m_transform = nullptr;
+
 	this->texture_file = other.texture_file;
 	this->m_pivot = other.m_pivot;
 
 	return *this;
 }
 
-void Sprite::Draw(Tigr* window,const Vec2& pos, const Vec2& scale) const{
+void Sprite::Draw(Tigr* window) const{
 	assert(image && "MSprite::Draw - Texture is nullptr!");
 
-	tigrBlit(window, image, (int)(pos.x - (image->w * m_pivot.x)), (int)(pos.y - (image->h * m_pivot.y)), 0,0, image->w, image->h);
+	tigrBlit(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), (int)(m_transform->position.y - (image->h * m_pivot.y)), 0,0, image->w, image->h);
 }
 
 void Sprite::ChangeTexture(const std::string& fileName){
@@ -70,8 +74,8 @@ bool Sprite::Load(std::string& fileName, Sprite& obj){
 		return false;
 	}
 
-	obj.m_pivot.x = node.attribute("source_x").as_float();
-	obj.m_pivot.y = node.attribute("source_y").as_float();
+	obj.m_pivot.x = node.attribute("pivot_x").as_float();
+	obj.m_pivot.y = node.attribute("pivot_y").as_float();
 
 	obj.ChangeTexture(node.attribute("texture_file").as_string());
 
@@ -82,8 +86,8 @@ bool Sprite::Save(std::string& fileName, const Sprite& obj){
 	pugi::xml_document doc;
 	pugi::xml_node node = doc.append_child("Sprite");
 
-	node.append_attribute("source_x").set_value(obj.m_pivot.x);
-	node.append_attribute("source_y").set_value(obj.m_pivot.y);
+	node.append_attribute("pivot_x").set_value(obj.m_pivot.x);
+	node.append_attribute("pivot_y").set_value(obj.m_pivot.y);
 	node.append_attribute("texture_file").set_value(obj.texture_file.c_str());
 
 	try {
