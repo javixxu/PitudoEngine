@@ -5,12 +5,11 @@
 #include <pugixml/pugixml.hpp>
 #include <iostream>
 
-#include "Vec2.h"
-
 Sprite::Sprite():image(nullptr),m_transform(nullptr), m_pivot(){
 }
 
-Sprite::Sprite(const Transform* transform,const std::string& fileName, Vec2 pivot):image(nullptr), m_pivot(pivot), m_transform(transform){
+Sprite::Sprite(const Transform* transform,const std::string& fileName, Vec2 pivot):
+	image(nullptr), m_pivot(pivot), m_transform(transform){
 	ChangeTexture(fileName);
 }
 
@@ -43,7 +42,6 @@ Sprite& Sprite::operator=(Sprite&& other) noexcept{
 
 	this->texture_file = other.texture_file;
 	this->m_pivot = other.m_pivot;
-
 	return *this;
 }
 
@@ -53,12 +51,17 @@ void Sprite::Draw(Tigr* window) const{
 	tigrBlit(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), (int)(m_transform->position.y - (image->h * m_pivot.y)), 0,0, image->w, image->h);
 }
 
-void Sprite::ChangeTexture(const std::string& fileName){
+void Sprite::ChangeTexture(const std::string& fileName) {
 	texture_file = fileName;
-	if(image)
+	if (image)
 		tigrFree(image);
 
 	image = tigrLoadImage(texture_file.c_str());
+}
+
+const Vec2 Sprite::getImageSize()
+{
+	return Vec2(image->w, image->h);;
 }
 
 bool Sprite::Load(std::string& fileName, Sprite& obj){

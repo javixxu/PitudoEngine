@@ -17,6 +17,7 @@ public:
 	Vec2 operator-(const Vec2& _other) const;
 	Vec2 operator*(const Vec2& _other) const;
 	Vec2 operator/(const Vec2& _other) const;
+	Vec2 operator/(const float& _other) const;
 	bool operator==(const Vec2& _other) const;
 	bool operator==(const float& _other) const;
 	bool operator!=(const Vec2& _other) const;

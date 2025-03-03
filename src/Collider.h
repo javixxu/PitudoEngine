@@ -28,23 +28,26 @@ class Collider : public Component{
 protected:
     const Transform* m_transform;
 
-    ColliderShape m_colliderShape;
-    Vec2 m_pOffset; // Desplazamiento relativo respecto al Transform
-    Vec2 m_Size; // Tamaño relativo al Transform
 
     static bool checkCircleCircle(const Vec2& pos1, float radius1, const Vec2& pos2, float radius2);
     static bool checkCircleRect(const Vec2& circlePos, float circleRadius, const Vec2& rectPos, const Vec2& rectSize);
     static bool checkRectRect(const Vec2& rectPos1, const Vec2& rectSize1, const Vec2& rectPos2, const Vec2& rectSize2);
 
 public:
+    ColliderShape m_colliderShape;
+    CollisionType m_collisionType;
+
+    Vec2 m_pivot; // Pivote delcollider (MAS FACIL DE CARA A VINCULARLO CON SPRITE)
+    Vec2 m_Size;  // Tamaño relativo al Transform
+
     Collider();
-    Collider(const Transform* transform, ColliderShape colliderShape = ColliderShape::RECT, Vec2 positionOffset = {}, Vec2 size = {1,1});
+    Collider(const Transform* transform, ColliderShape colliderShape = ColliderShape::RECT, 
+        Vec2 pivot = {}, Vec2 size = {1,1},CollisionType collisionType = CollisionType::BLOCK);
+
 	virtual ~Collider() = default;
 
 	bool collides(const Collider& other) const;
 	bool collides(const Vec2& circlePos, float circleRadius) const;
 	bool collides(const Vec2& rectPos, const Vec2& rectSize) const;
 
-    const Vec2& getOffset() const;
-    void SetOffset(Vec2& newOffset);
 };

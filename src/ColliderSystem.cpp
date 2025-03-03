@@ -19,6 +19,7 @@ void ColliderSystem::Update(float deltaTime){
 
 				if (collider1.collides(collider2)) {
 					//TO DO:: HANDLE COLLISION
+					printf("COLLISION\n");
 				}
 			}
 		}

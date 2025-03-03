@@ -8,6 +8,7 @@
 
 #include "RenderSystem.h"
 #include "InputSystem.h"
+#include "ColliderSystem.h"
 
 #include "Transform.h"
 #include "Sprite.h"
@@ -47,19 +48,40 @@ namespace PitudoEngine {
         renderSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
 
 
+        auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
+        
+
         Signature signature;
         signature.set(ecsManager->GetComponentType<Transform>());
         signature.set(ecsManager->GetComponentType<Sprite>());
+        signature.set(ecsManager->GetComponentType<Collider>());
         ecsManager->SetSystemSignature<RenderSystem>(signature);
 
         auto entity = ecsManager->CreateEntity();
 
-        ecsManager->AddComponent<Transform>(entity, Vec2(400,300), Vec2(1,1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png");
-        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::RECT);
-        
+        ecsManager->AddComponent<Transform>(entity, Vec2(-1,300), Vec2(1,1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png",Vec2(0.5f));
+        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::CIRCLE,Vec2(0.5f));
+
         Transform* trs = &ecsManager->GetComponent<Transform>(entity);
         trs->scale = { 1.0f, 1.0f };
+
+        Sprite* sprite = &ecsManager->GetComponent<Sprite>(entity);
+        Collider* coll = &ecsManager->GetComponent<Collider>(entity);
+        coll->m_Size = sprite->getImageSize() / 2.0F;
+
+        entity = ecsManager->CreateEntity();
+
+        ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png", Vec2(0.5f));
+        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::RECT, Vec2(0.5f));
+        
+        trs = &ecsManager->GetComponent<Transform>(entity);
+        trs->scale = { 1.0f, 1.0f };
+
+        sprite = &ecsManager->GetComponent<Sprite>(entity);
+        coll = &ecsManager->GetComponent<Collider>(entity);
+        coll->m_Size = sprite->getImageSize();
 
         //sprite = new Sprite();
         //std::string x("../data/safe.xml");

@@ -4,7 +4,9 @@
 
 #include "Transform.h"
 #include "Sprite.h"
+#include "Collider.h"
 #include "Engine.h"
+
 namespace PitudoEngine {
 	RenderSystem::RenderSystem() :m_Window(nullptr) {
 
@@ -22,10 +24,23 @@ namespace PitudoEngine {
 		tigrClear(m_Window, tigrRGB(0x80, 0x90, 0xa0));
 
 		for (auto& entity : mEntities) {
-			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
-			auto& sprite = m_ecsManager->GetComponent<Sprite>(entity);
 
+			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
+			auto& collider = m_ecsManager->GetComponent<Collider>(entity);
+			auto& sprite = m_ecsManager->GetComponent<Sprite>(entity);
 			sprite.Draw(m_Window);
+
+		#ifdef _DEBUG
+			if (collider.m_colliderShape == ColliderShape::RECT) {
+				Vec2 collPos = transform.position - (collider.m_Size * collider.m_pivot);
+				tigrFillRect(m_Window, collPos.x, collPos.y, collider.m_Size.x, collider.m_Size.y, tigrRGBA(0x00, 0xFF, 0x00, 0x80));
+			}
+			else {
+				Vec2 collPos = transform.position;
+				tigrFillCircle(m_Window, collPos.x, collPos.y, collider.m_Size.x, tigrRGBA(0x00, 0xFF, 0x00, 0x80));
+			}
+		#endif
+
 		}
 
 	#ifdef _DEBUG

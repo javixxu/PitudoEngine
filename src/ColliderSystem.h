@@ -3,6 +3,7 @@
 
 class ColliderSystem :public System
 {
+public:
 	ColliderSystem();
 	~ColliderSystem();
 

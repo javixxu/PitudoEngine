@@ -40,6 +40,11 @@ Vec2 Vec2::operator/(const Vec2& _other) const
 	return Vec2(x / _other.x, y / _other.y);
 }
 
+Vec2 Vec2::operator/(const float& _other) const
+{
+    return Vec2(x / _other, y / _other);
+}
+
 bool Vec2::operator==(const Vec2& _other) const
 {
     return this->x == _other.x && this->y == _other.y;
