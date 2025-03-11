@@ -5,106 +5,108 @@
 #include <pugixml/pugixml.hpp>
 #include <iostream>
 
-Sprite::Sprite():image(nullptr),m_transform(nullptr), m_pivot(){
-}
-
-Sprite::Sprite(const Transform* transform,const std::string& fileName, Vec2 pivot):
-	image(nullptr), m_pivot(pivot), m_transform(transform){
-	ChangeTexture(fileName);
-}
-
-Sprite::~Sprite(){
-	if(image)
-		tigrFree(image);
-}
-
-Sprite::Sprite(const Sprite& other) noexcept{
-	*this = other;
-}
-
-Sprite::Sprite(Sprite&& other) noexcept{
-	*this = std::move(other);
-}
-
-Sprite& Sprite::operator=(const Sprite& other) noexcept{
-	this->m_pivot = other.m_pivot;
-	this->m_transform = other.m_transform;
-	this->ChangeTexture(other.texture_file);
-	return *this;
-}
-
-Sprite& Sprite::operator=(Sprite&& other) noexcept{
-	this->image = other.image;
-	other.image = nullptr;
-
-	this->m_transform = other.m_transform;
-	other.m_transform = nullptr;
-
-	this->texture_file = other.texture_file;
-	this->m_pivot = other.m_pivot;
-	return *this;
-}
-
-void Sprite::Draw(Tigr* window) const{
-	assert(image && "MSprite::Draw - Texture is nullptr!");
-
-	tigrBlit(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), (int)(m_transform->position.y - (image->h * m_pivot.y)), 0,0, image->w, image->h);
-}
-
-void Sprite::ChangeTexture(const std::string& fileName) {
-	texture_file = fileName;
-	if (image)
-		tigrFree(image);
-
-	image = tigrLoadImage(texture_file.c_str());
-}
-
-const Vec2 Sprite::getImageSize()
-{
-	return Vec2(image->w, image->h);;
-}
-
-bool Sprite::Load(std::string& fileName, Sprite& obj){
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file(fileName.c_str());
-
-	if (!result) {
-		return false;
+namespace PitudoEngine {
+	Sprite::Sprite() :image(nullptr), m_transform(nullptr), m_pivot() {
 	}
 
-	pugi::xml_node node = doc.child("Sprite");
-	if (!node) {
-		return false;
+	Sprite::Sprite(const Transform* transform, const std::string& fileName, Vec2 pivot) :
+		image(nullptr), m_pivot(pivot), m_transform(transform) {
+		ChangeTexture(fileName);
 	}
 
-	obj.m_pivot.x = node.attribute("pivot_x").as_float();
-	obj.m_pivot.y = node.attribute("pivot_y").as_float();
+	Sprite::~Sprite() {
+		if (image)
+			tigrFree(image);
+	}
 
-	obj.ChangeTexture(node.attribute("texture_file").as_string());
+	Sprite::Sprite(const Sprite& other) noexcept {
+		*this = other;
+	}
 
-	return true;
-}
+	Sprite::Sprite(Sprite&& other) noexcept {
+		*this = std::move(other);
+	}
 
-bool Sprite::Save(std::string& fileName, const Sprite& obj){
-	pugi::xml_document doc;
-	pugi::xml_node node = doc.append_child("Sprite");
+	Sprite& Sprite::operator=(const Sprite& other) noexcept {
+		this->m_pivot = other.m_pivot;
+		this->m_transform = other.m_transform;
+		this->ChangeTexture(other.texture_file);
+		return *this;
+	}
 
-	node.append_attribute("pivot_x").set_value(obj.m_pivot.x);
-	node.append_attribute("pivot_y").set_value(obj.m_pivot.y);
-	node.append_attribute("texture_file").set_value(obj.texture_file.c_str());
+	Sprite& Sprite::operator=(Sprite&& other) noexcept {
+		this->image = other.image;
+		other.image = nullptr;
 
-	try {
-		std::ofstream file(fileName);
-		if (!file.is_open()) {
+		this->m_transform = other.m_transform;
+		other.m_transform = nullptr;
+
+		this->texture_file = other.texture_file;
+		this->m_pivot = other.m_pivot;
+		return *this;
+	}
+
+	void Sprite::Draw(Tigr* window) const {
+		assert(image && "MSprite::Draw - Texture is nullptr!");
+
+		tigrBlit(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), (int)(m_transform->position.y - (image->h * m_pivot.y)), 0, 0, image->w, image->h);
+	}
+
+	void Sprite::ChangeTexture(const std::string& fileName) {
+		texture_file = fileName;
+		if (image)
+			tigrFree(image);
+
+		image = tigrLoadImage(texture_file.c_str());
+	}
+
+	const Vec2 Sprite::getImageSize()
+	{
+		return Vec2((float)image->w, (float)image->h);
+	}
+
+	bool Sprite::Load(std::string& fileName, Sprite& obj) {
+		pugi::xml_document doc;
+		pugi::xml_parse_result result = doc.load_file(fileName.c_str());
+
+		if (!result) {
 			return false;
 		}
 
-		doc.save(file);
-		file.close();
+		pugi::xml_node node = doc.child("Sprite");
+		if (!node) {
+			return false;
+		}
+
+		obj.m_pivot.x = node.attribute("pivot_x").as_float();
+		obj.m_pivot.y = node.attribute("pivot_y").as_float();
+
+		obj.ChangeTexture(node.attribute("texture_file").as_string());
 
 		return true;
 	}
-	catch (...) {
-		return false;
+
+	bool Sprite::Save(std::string& fileName, const Sprite& obj) {
+		pugi::xml_document doc;
+		pugi::xml_node node = doc.append_child("Sprite");
+
+		node.append_attribute("pivot_x").set_value(obj.m_pivot.x);
+		node.append_attribute("pivot_y").set_value(obj.m_pivot.y);
+		node.append_attribute("texture_file").set_value(obj.texture_file.c_str());
+
+		try {
+			std::ofstream file(fileName);
+			if (!file.is_open()) {
+				return false;
+			}
+
+			doc.save(file);
+			file.close();
+
+			return true;
+		}
+		catch (...) {
+			return false;
+		}
 	}
 }

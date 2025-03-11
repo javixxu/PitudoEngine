@@ -14,40 +14,47 @@ T clamp(T value, T min, T max) {
     return value;
 }
 
-enum class ColliderShape {
-    RECT = 0,
-    CIRCLE = 1
-};
+namespace PitudoEngine {
 
-enum class CollisionType {
-    BLOCK = 0,
-    OVERLAP = 1
-};
+    enum class ColliderShape {
+        RECT = 0,
+        CIRCLE = 1
+    };
 
-class Collider : public Component{
-protected:
-    const Transform* m_transform;
+    enum class CollisionType {
+        BLOCK = 0,
+        OVERLAP = 1
+    };
 
+    class Collider : public Component {
+    protected:
+        const Transform* m_transform;
 
-    static bool checkCircleCircle(const Vec2& pos1, float radius1, const Vec2& pos2, float radius2);
-    static bool checkCircleRect(const Vec2& circlePos, float circleRadius, const Vec2& rectPos, const Vec2& rectSize);
-    static bool checkRectRect(const Vec2& rectPos1, const Vec2& rectSize1, const Vec2& rectPos2, const Vec2& rectSize2);
+        typedef void (*CollisionCallbackFunc)(const Entity& _Msprite,const Entity& _Osprite);
+        CollisionCallbackFunc m_OnCollisionCallBack = nullptr;
 
-public:
-    ColliderShape m_colliderShape;
-    CollisionType m_collisionType;
+        static bool checkCircleCircle(const Vec2& pos1, float radius1, const Vec2& pos2, float radius2);
+        static bool checkCircleRect(const Vec2& circlePos, float circleRadius, const Vec2& rectPos, const Vec2& rectSize);
+        static bool checkRectRect(const Vec2& rectPos1, const Vec2& rectSize1, const Vec2& rectPos2, const Vec2& rectSize2);
 
-    Vec2 m_pivot; // Pivote delcollider (MAS FACIL DE CARA A VINCULARLO CON SPRITE)
-    Vec2 m_Size;  // Tamaño relativo al Transform
+    public:
+        ColliderShape m_colliderShape;
+        CollisionType m_collisionType;
 
-    Collider();
-    Collider(const Transform* transform, ColliderShape colliderShape = ColliderShape::RECT, 
-        Vec2 pivot = {}, Vec2 size = {1,1},CollisionType collisionType = CollisionType::BLOCK);
+        Vec2 m_pivot; // Pivote delcollider (MAS FACIL DE CARA A VINCULARLO CON SPRITE)
+        Vec2 m_Size;  // Tamaño relativo al Transform
 
-	virtual ~Collider() = default;
+        Collider();
+        Collider(const Transform* transform, ColliderShape colliderShape = ColliderShape::RECT,
+            Vec2 pivot = {}, Vec2 size = { 1,1 }, CollisionType collisionType = CollisionType::BLOCK);
 
-	bool collides(const Collider& other) const;
-	bool collides(const Vec2& circlePos, float circleRadius) const;
-	bool collides(const Vec2& rectPos, const Vec2& rectSize) const;
+        virtual ~Collider() = default;
 
-};
+        bool collides(const Collider& other) const;
+        bool collides(const Vec2& circlePos, float circleRadius) const;
+        bool collides(const Vec2& rectPos, const Vec2& rectSize) const;
+
+        void SetOnCollisionCallback(CollisionCallbackFunc collisionCallback);
+        CollisionCallbackFunc getOnCollisionCallback() const;
+    };
+}
