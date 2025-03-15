@@ -29,6 +29,16 @@ public:
 		mSignatures.insert({typeName, signature});
 	}
 
+	template<typename T>
+	T& GetSystem() {
+		const char* typeName = typeid(T).name();
+
+		assert(mSystems.find(typeName) != mSystems.end() && "System Not Found.");
+
+		auto it = mSystems.find(typeName);
+		return static_cast<T&>(*it->second.get());
+	};
+
     void EntityDestroyed(Entity entity){
 		// Erase a destroyed entity from all system lists
 		// mEntities is a set so no check needed

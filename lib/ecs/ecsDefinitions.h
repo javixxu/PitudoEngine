@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <bitset>
 
+
 // A simple type alias
 using Entity = uint32_t;
 // A simple type alias

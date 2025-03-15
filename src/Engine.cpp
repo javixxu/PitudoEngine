@@ -10,6 +10,11 @@
 #include "InputSystem.h"
 #include "ColliderSystem.h"
 
+//QUITAR
+#include "PlayersSystem.h"
+#include "PlayerController.h"
+//QUITAR
+
 #include "Transform.h"
 #include "Sprite.h"
 #include "Collider.h"
@@ -21,8 +26,6 @@
         Colliders   
         Render == DONE
 */
-
-
 
 namespace PitudoEngine {
     bool Engine::Init(){
@@ -40,28 +43,44 @@ namespace PitudoEngine {
         ecsManager->RegisterComponent<Transform>();
         ecsManager->RegisterComponent<Sprite>();
         ecsManager->RegisterComponent<Collider>();
+        ecsManager->RegisterComponent<SuperPangGame::PlayerController>();
 
         auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
         inputSystem->setContext(m_screen); //PRIMERO EN REGISTRAR PUES ES EL INPUT
+
+        auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
+
+        auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
 
         auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
         renderSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
 
 
-        auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
         
+        //SIGNATURES
+        Signature signatureRenderSystem;
+        signatureRenderSystem.set(ecsManager->GetComponentType<Transform>());
+        signatureRenderSystem.set(ecsManager->GetComponentType<Sprite>());
+        signatureRenderSystem.set(ecsManager->GetComponentType<Collider>());
+        ecsManager->SetSystemSignature<RenderSystem>(signatureRenderSystem);
 
-        Signature signature;
-        signature.set(ecsManager->GetComponentType<Transform>());
-        signature.set(ecsManager->GetComponentType<Sprite>());
-        signature.set(ecsManager->GetComponentType<Collider>());
-        ecsManager->SetSystemSignature<RenderSystem>(signature);
+        Signature signatureCollider;
+        signatureCollider.set(ecsManager->GetComponentType<Transform>());
+        signatureCollider.set(ecsManager->GetComponentType<Collider>());
+        ecsManager->SetSystemSignature<ColliderSystem>(signatureCollider);
 
+        Signature signaturePlayerSystem;
+        signaturePlayerSystem.set(ecsManager->GetComponentType<Transform>());
+        signaturePlayerSystem.set(ecsManager->GetComponentType<SuperPangGame::PlayerController>());
+        ecsManager->SetSystemSignature<SuperPangGame::PlayersSystem>(signaturePlayerSystem);
+
+        //ENTITY 1
         auto entity = ecsManager->CreateEntity();
 
         ecsManager->AddComponent<Transform>(entity, Vec2(-1,300), Vec2(1,1), 0.0f);
         ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png",Vec2(0.5f));
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::CIRCLE,Vec2(0.5f));
+        ecsManager->AddComponent<SuperPangGame::PlayerController>(entity);
 
         Transform* trs = &ecsManager->GetComponent<Transform>(entity);
         trs->scale = { 1.0f, 1.0f };
@@ -69,6 +88,9 @@ namespace PitudoEngine {
         Sprite* sprite = &ecsManager->GetComponent<Sprite>(entity);
         Collider* coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_Size = sprite->getImageSize() / 2.0F;
+
+
+        //ENTITY 2
 
         entity = ecsManager->CreateEntity();
 
@@ -83,9 +105,15 @@ namespace PitudoEngine {
         coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_Size = sprite->getImageSize();
 
+
+
+
+
         //sprite = new Sprite();
         //std::string x("../data/safe.xml");
         //Sprite::Load(x, *sprite);
+        // MEM LEAK TESTING
+        //int* x = new int();
     }
 
     void Engine::Run(){

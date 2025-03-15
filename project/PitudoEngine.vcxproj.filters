@@ -96,6 +96,12 @@
     <ClCompile Include="..\src\Collider.cpp">
       <Filter>Source Files\Componets</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PlayerController.cpp">
+      <Filter>Source Files\Componets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PlayersSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Engine.h">
@@ -166,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="..\src\Collider.h">
       <Filter>Header Files\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlayerController.h">
+      <Filter>Header Files\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlayersSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

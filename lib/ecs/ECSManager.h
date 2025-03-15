@@ -2,8 +2,7 @@
 #include "EntityManager.h"
 #include "ComponentManager.h"
 #include "SystemManager.h"
-
-class ECSManager{
+class ECSManager {
 
 public:
 	static ECSManager& getInstance() {
@@ -15,14 +14,14 @@ public:
 	ECSManager& operator=(const ECSManager&) = delete;
 
 
-    void Init();
+	void Init();
 	void Close();
-    Entity CreateEntity();
-    void DestroyEntity(Entity entity);
+	Entity CreateEntity();
+	void DestroyEntity(Entity entity);
 
-    // Component methods
+	// Component methods
 	template<typename T>
-	void RegisterComponent(){
+	void RegisterComponent() {
 		mComponentManager->RegisterComponent<T>();
 	}
 
@@ -39,7 +38,7 @@ public:
 	}
 
 	template<typename T>
-	void RemoveComponent(Entity entity){
+	void RemoveComponent(Entity entity) {
 		mComponentManager->RemoveComponent<T>(entity);
 
 		auto signature = mEntityManager->GetSignature(entity);
@@ -50,24 +49,28 @@ public:
 	}
 
 	template<typename T>
-	T& GetComponent(Entity entity){
+	T& GetComponent(Entity entity) {
 		return mComponentManager->GetComponent<T>(entity);
 	}
 
 	template<typename T>
-	ComponentType GetComponentType(){
+	ComponentType GetComponentType() {
 		return mComponentManager->GetComponentType<T>();
 	}
 
+	template<typename T>
+	T& GetSystem() {
+		return mSystemManager->GetSystem<T>();
+	}
 
 	// System methods
 	template<typename T>
-	std::shared_ptr<T> RegisterSystem(){
+	std::shared_ptr<T> RegisterSystem() {
 		return mSystemManager->RegisterSystem<T>();
 	}
 
 	template<typename T>
-	void SetSystemSignature(Signature signature){
+	void SetSystemSignature(Signature signature) {
 		mSystemManager->SetSignature<T>(signature);
 	}
 

@@ -27,9 +27,9 @@ namespace PitudoEngine {
 						if (collider2.getOnCollisionCallback()) collider2.getOnCollisionCallback()(entity2,entity1);
 
 						//TO DO:: HANDLE COLLISION
-						if (collider1.m_collisionType == CollisionType::BLOCK && collider2.m_collisionType == CollisionType::BLOCK) {
+						//if (collider1.m_collisionType == CollisionType::BLOCK && collider2.m_collisionType == CollisionType::BLOCK) {
 							//Seprate Objects
-						}
+						//}
 					}
 				}
 			}
