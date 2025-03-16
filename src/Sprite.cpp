@@ -49,10 +49,11 @@ namespace PitudoEngine {
 	void Sprite::Draw(Tigr* window) const {
 		assert(image && "MSprite::Draw - Texture is nullptr!");
 
-		tigrBlitAlpha(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), (int)(m_transform->position.y - (image->h * m_pivot.y)), 0, 0, image->w/2.0f, image->h,1.0f);
+		tigrBlitAlpha(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), 
+			(int)(m_transform->position.y - (image->h * m_pivot.y)), 0, 0, image->w, image->h,1.0f);
 	}
 
-	void Sprite::ChangeTexture(const std::string& fileName) {
+	void Sprite::ChangeTexture(const std::string& fileName) { 
 		texture_file = fileName;
 		if (image)
 			tigrFree(image);

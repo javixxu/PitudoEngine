@@ -7,6 +7,9 @@ class Vec2;
 class Sprite;
 class ECSManager;
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
 namespace PitudoEngine {
 
 	class Engine{
@@ -21,7 +24,6 @@ namespace PitudoEngine {
 
 		Sprite* sprite;
 
-		void Input();
 		void Update();
 		//void Render();
 
@@ -46,6 +48,8 @@ namespace PitudoEngine {
 		static void printText(Tigr* screen,const std::string& text,Vec2 pos);
 
 		static void logme(const std::string& text);
+
+		void CreateBorders();
 	};
 
 }

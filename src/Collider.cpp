@@ -60,12 +60,12 @@ namespace PitudoEngine {
 
 
 
-    Collider::Collider() :m_transform(nullptr), m_colliderShape(ColliderShape::RECT), m_pivot(), m_Size(1), m_collisionType(CollisionType::BLOCK) {
+    Collider::Collider() :m_transform(nullptr), m_colliderShape(ColliderShape::RECT), m_pivot(), m_Size(1) {
     }
 
-    Collider::Collider(const Transform* transform, ColliderShape colliderShape, Vec2 pivot, Vec2 size, CollisionType collisionType) :
+    Collider::Collider(const Transform* transform, ColliderShape colliderShape, Vec2 pivot, Vec2 size,std::string collisionLayer) :
         m_transform(transform), m_colliderShape(colliderShape),
-        m_pivot(pivot), m_Size(size), m_collisionType(collisionType) {
+        m_pivot(pivot), m_Size(size),m_collisionLayer(collisionLayer) {
     }
 
     bool Collider::collides(const Collider& other) const {

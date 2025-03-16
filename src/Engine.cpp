@@ -7,22 +7,27 @@
 #include "Vec2.h"
 
 #include "RenderSystem.h"
+#include "RenderDebugSystem.h"
 #include "InputSystem.h"
 #include "ColliderSystem.h"
 
 //QUITAR
 #include "PlayersSystem.h"
 #include "PlayerController.h"
+#include "EnemySystem.h"
+#include "Enemy.h"
+
 //QUITAR
 
 #include "Transform.h"
 #include "Sprite.h"
 #include "Collider.h"
 
+
 namespace PitudoEngine {
     bool Engine::Init(){
         m_bIsRunning = true;
-        m_screen = tigrWindow(800, 600, "PitudoEngine", 0);
+        m_screen = tigrWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "PitudoEngine", 0);
         std::cout << "Initializing Tiger\n";
        
         ecsManager = &ECSManager::getInstance();
@@ -35,26 +40,40 @@ namespace PitudoEngine {
         ecsManager->RegisterComponent<Transform>();
         ecsManager->RegisterComponent<Sprite>();
         ecsManager->RegisterComponent<Collider>();
+
+        // TO DO:: QUITAR
         ecsManager->RegisterComponent<SuperPangGame::PlayerController>();
+        ecsManager->RegisterComponent<SuperPangGame::Enemy>();
+        // TO DO:: QUITAR
 
         auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
         inputSystem->setContext(m_screen); //PRIMERO EN REGISTRAR PUES ES EL INPUT
 
+        // TO DO:: QUITAR
         auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
+        auto enemysSystem = ecsManager->RegisterSystem<SuperPangGame::EnemySystem>();
+        // TO DO:: QUITAR
 
         auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
 
         auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
         renderSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
 
-
+    #ifdef _DEBUG
+        auto renderDebugSystem = ecsManager->RegisterSystem<RenderDebugSystem>();
+        renderDebugSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
+    #endif
         
         //SIGNATURES
         Signature signatureRenderSystem;
         signatureRenderSystem.set(ecsManager->GetComponentType<Transform>());
         signatureRenderSystem.set(ecsManager->GetComponentType<Sprite>());
-        //signatureRenderSystem.set(ecsManager->GetComponentType<Collider>());
         ecsManager->SetSystemSignature<RenderSystem>(signatureRenderSystem);
+
+        Signature signatureRenderDebugSystem;
+        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Transform>());
+        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Collider>());
+        ecsManager->SetSystemSignature<RenderDebugSystem>(signatureRenderDebugSystem);
 
         Signature signatureCollider;
         signatureCollider.set(ecsManager->GetComponentType<Transform>());
@@ -65,6 +84,13 @@ namespace PitudoEngine {
         signaturePlayerSystem.set(ecsManager->GetComponentType<Transform>());
         signaturePlayerSystem.set(ecsManager->GetComponentType<SuperPangGame::PlayerController>());
         ecsManager->SetSystemSignature<SuperPangGame::PlayersSystem>(signaturePlayerSystem);
+
+        Signature signatureEnemySystem;
+        signatureEnemySystem.set(ecsManager->GetComponentType<Transform>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<SuperPangGame::Enemy>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<Collider>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<Sprite>());
+        ecsManager->SetSystemSignature<SuperPangGame::EnemySystem>(signatureEnemySystem);
 
         //BACKGROUND
         auto entity = ecsManager->CreateEntity();
@@ -77,8 +103,10 @@ namespace PitudoEngine {
 
         trs->position = sprite->getImageSize() / 2;
 
+        //BORDER COLLIDERS
+        CreateBorders();
 
-        //ENTITY 1
+        //PLAYER 
         entity = ecsManager->CreateEntity();
 
         ecsManager->AddComponent<Transform>(entity, Vec2(400,570), Vec2(1,1), 0.0f);
@@ -166,26 +194,20 @@ namespace PitudoEngine {
         tigrPrint(screen, tfont, (int)pos.x, (int)pos.y, tigrRGB(0xff, 0xff, 0xff), text.c_str());
     }
 
-    void Engine::Input() {
-        m_bIsRunning = !tigrClosed(m_screen) && !tigrKeyDown(m_screen, TK_ESCAPE);
-
-        //if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_RIGHT)) {
-        //    //sprite->setPosition(sprite->getPosition() + Vec2(10, 0));
-        //}
-        //if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_LEFT)) {
-        //    //sprite->setPosition(sprite->getPosition() + Vec2(-10, 0));
-        //}
-        //if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_UP)) {
-        //    //sprite->setPosition(sprite->getPosition() + Vec2(0, -10));
-        //}
-        //if (!tigrClosed(m_screen) && tigrKeyHeld(m_screen, TK_DOWN)) {
-        //    //sprite->setPosition(sprite->getPosition() + Vec2(0, 10));
-        //}
-    }
-
     void Engine::Update(){
-        Input();
-        ecsManager->UpdateSystems(m_deltaTime);
+        //TO DO:: QUITAR
+        m_bIsRunning = !tigrClosed(m_screen) && !tigrKeyDown(m_screen, TK_ESCAPE);
+        //TO DO:: QUITAR
+
+        ecsManager->GetSystem<InputSystem>().Update(m_deltaTime);
+        ecsManager->GetSystem<SuperPangGame::PlayersSystem>().Update(m_deltaTime);
+        ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
+        ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
+        ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
+    #ifdef _DEBUG
+        ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
+    #endif
+        //ecsManager->UpdateSystems(m_deltaTime);
     }
 
     float Engine::Wait(float ms){
@@ -199,5 +221,35 @@ namespace PitudoEngine {
 
     void Engine::logme(const std::string& text) {
         std::cout << text << "\n";
+    }
+
+    void Engine::CreateBorders(){
+        const float BORDER_THICKNESS = 10.0f;
+        std::string layer = "border";
+        // Crear borde superior
+        Entity topBorder = ecsManager->CreateEntity();
+        ecsManager->AddComponent<Transform>(topBorder, Vec2(SCREEN_WIDTH / 2, BORDER_THICKNESS / 2), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Collider>(topBorder, &ecsManager->GetComponent<Transform>(topBorder),
+            ColliderShape::RECT, Vec2(0.5f), Vec2(SCREEN_WIDTH, BORDER_THICKNESS), layer);
+
+        // Crear borde inferior
+        Entity bottomBorder = ecsManager->CreateEntity();
+        ecsManager->AddComponent<Transform>(bottomBorder, Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT - BORDER_THICKNESS / 2), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Collider>(bottomBorder, &ecsManager->GetComponent<Transform>(bottomBorder), 
+            ColliderShape::RECT, Vec2(0.5f), Vec2(SCREEN_WIDTH, BORDER_THICKNESS), layer);
+
+        // Crear borde izquierdo
+        Entity leftBorder = ecsManager->CreateEntity();
+        ecsManager->AddComponent<Transform>(leftBorder, Vec2(BORDER_THICKNESS / 2, SCREEN_HEIGHT / 2), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Collider>(leftBorder, &ecsManager->GetComponent<Transform>(leftBorder), 
+            ColliderShape::RECT, Vec2(0.5f), Vec2(BORDER_THICKNESS, SCREEN_HEIGHT), layer);
+
+        // Crear borde derecho
+        Entity rightBorder = ecsManager->CreateEntity();
+        ecsManager->AddComponent<Transform>(rightBorder, Vec2(SCREEN_WIDTH - BORDER_THICKNESS / 2, SCREEN_HEIGHT / 2), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Collider>(rightBorder, &ecsManager->GetComponent<Transform>(rightBorder), 
+            ColliderShape::RECT, Vec2(0.5f), Vec2(BORDER_THICKNESS, SCREEN_HEIGHT), layer);
+
+        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers(layer, layer);
     }
 }

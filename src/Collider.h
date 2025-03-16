@@ -21,11 +21,6 @@ namespace PitudoEngine {
         CIRCLE = 1
     };
 
-    enum class CollisionType {
-        BLOCK = 0,
-        OVERLAP = 1
-    };
-
     class Collider : public Component {
     protected:
         const Transform* m_transform;
@@ -39,14 +34,16 @@ namespace PitudoEngine {
 
     public:
         ColliderShape m_colliderShape;
-        CollisionType m_collisionType;
 
         Vec2 m_pivot; // Pivote delcollider (MAS FACIL DE CARA A VINCULARLO CON SPRITE)
         Vec2 m_Size;  // Tamaño relativo al Transform
 
+        std::string m_collisionLayer= "default";
+
+
         Collider();
         Collider(const Transform* transform, ColliderShape colliderShape = ColliderShape::RECT,
-            Vec2 pivot = {}, Vec2 size = { 1,1 }, CollisionType collisionType = CollisionType::BLOCK);
+            Vec2 pivot = {}, Vec2 size = { 1,1 },std::string collisionLayer="default");
 
         virtual ~Collider() = default;
 
