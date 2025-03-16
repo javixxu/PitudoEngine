@@ -19,14 +19,6 @@
 #include "Sprite.h"
 #include "Collider.h"
 
-/*
-        Input == DONE /(FALTA CLIKS RATON)
-        Update Sistemas 
-        Fisicas
-        Colliders   
-        Render == DONE
-*/
-
 namespace PitudoEngine {
     bool Engine::Init(){
         m_bIsRunning = true;
@@ -61,7 +53,7 @@ namespace PitudoEngine {
         Signature signatureRenderSystem;
         signatureRenderSystem.set(ecsManager->GetComponentType<Transform>());
         signatureRenderSystem.set(ecsManager->GetComponentType<Sprite>());
-        signatureRenderSystem.set(ecsManager->GetComponentType<Collider>());
+        //signatureRenderSystem.set(ecsManager->GetComponentType<Collider>());
         ecsManager->SetSystemSignature<RenderSystem>(signatureRenderSystem);
 
         Signature signatureCollider;
@@ -74,36 +66,48 @@ namespace PitudoEngine {
         signaturePlayerSystem.set(ecsManager->GetComponentType<SuperPangGame::PlayerController>());
         ecsManager->SetSystemSignature<SuperPangGame::PlayersSystem>(signaturePlayerSystem);
 
-        //ENTITY 1
+        //BACKGROUND
         auto entity = ecsManager->CreateEntity();
 
-        ecsManager->AddComponent<Transform>(entity, Vec2(-1,300), Vec2(1,1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png",Vec2(0.5f));
+        ecsManager->AddComponent<Transform>(entity, Vec2(0, 0), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/background.png", Vec2(0.5f));
+
+        Transform* trs = &ecsManager->GetComponent<Transform>(entity);
+        Sprite* sprite = &ecsManager->GetComponent<Sprite>(entity);
+
+        trs->position = sprite->getImageSize() / 2;
+
+
+        //ENTITY 1
+        entity = ecsManager->CreateEntity();
+
+        ecsManager->AddComponent<Transform>(entity, Vec2(400,570), Vec2(1,1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/player/Idle.png",Vec2(0.5f));
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::CIRCLE,Vec2(0.5f));
         ecsManager->AddComponent<SuperPangGame::PlayerController>(entity);
 
-        Transform* trs = &ecsManager->GetComponent<Transform>(entity);
-        trs->scale = { 1.0f, 1.0f };
-
-        Sprite* sprite = &ecsManager->GetComponent<Sprite>(entity);
-        Collider* coll = &ecsManager->GetComponent<Collider>(entity);
-        coll->m_Size = sprite->getImageSize() / 2.0F;
-
-
-        //ENTITY 2
-
-        entity = ecsManager->CreateEntity();
-
-        ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png", Vec2(0.5f));
-        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::RECT, Vec2(0.5f));
-        
         trs = &ecsManager->GetComponent<Transform>(entity);
         trs->scale = { 1.0f, 1.0f };
 
         sprite = &ecsManager->GetComponent<Sprite>(entity);
-        coll = &ecsManager->GetComponent<Collider>(entity);
-        coll->m_Size = sprite->getImageSize();
+        Collider* coll = &ecsManager->GetComponent<Collider>(entity);
+        coll->m_Size = sprite->getImageSize() / 2.0F;
+
+
+        ////ENTITY 2
+
+        //entity = ecsManager->CreateEntity();
+
+        //ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
+        //ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png", Vec2(0.5f));
+        //ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::RECT, Vec2(0.5f));
+        //
+        //trs = &ecsManager->GetComponent<Transform>(entity);
+        //trs->scale = { 1.0f, 1.0f };
+
+        //sprite = &ecsManager->GetComponent<Sprite>(entity);
+        //coll = &ecsManager->GetComponent<Collider>(entity);
+        //coll->m_Size = sprite->getImageSize();
 
 
 

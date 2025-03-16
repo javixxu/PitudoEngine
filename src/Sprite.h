@@ -12,6 +12,12 @@ namespace PitudoEngine {
 	protected:
 		std::string texture_file;
 		const Transform* m_transform;
+
+		int m_hframes;               // Numero de frames en horizontal
+		int m_vframes;               // Numero de frames en vertical
+
+		int m_fps;                   // Frames por segundo
+		float m_currentFrame;        // Frame actual
 	public:
 		Vec2 m_pivot;
 
