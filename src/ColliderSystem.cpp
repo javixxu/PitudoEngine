@@ -12,15 +12,21 @@ namespace PitudoEngine {
 	}
 
 	void ColliderSystem::Update(float deltaTime) {
+		
+		std::unordered_map<Entity, Entity> currentCollisions;
 
 		for (auto& entity1 : mEntities) {
 			for (auto& entity2 : mEntities) {
-				if (entity1 != entity2) {
+
+				bool ignoreCollision = (currentCollisions.find(entity1) != currentCollisions.end() &&
+					currentCollisions[entity1] == entity2);
+
+				if (entity1 != entity2 && !ignoreCollision) {
 					auto& collider1 = m_ecsManager->GetComponent<Collider>(entity1);
 					auto& collider2 = m_ecsManager->GetComponent<Collider>(entity2);
 
 					// Verificar si la capa de collider1 debe ignorar a collider2
-					bool ignoreCollision = (m_ignoreLayers.find(collider1.m_collisionLayer) != m_ignoreLayers.end() &&
+					ignoreCollision = (m_ignoreLayers.find(collider1.m_collisionLayer) != m_ignoreLayers.end() &&
 						m_ignoreLayers[collider1.m_collisionLayer] == collider2.m_collisionLayer);
 
 					if (collider1.collides(collider2) && !ignoreCollision) {
@@ -30,6 +36,9 @@ namespace PitudoEngine {
 						//Send Collision Methods CallBacks
 						if (collider1.getOnCollisionCallback()) collider1.getOnCollisionCallback()(entity1,entity2);
 						if (collider2.getOnCollisionCallback()) collider2.getOnCollisionCallback()(entity2,entity1);
+
+						currentCollisions.insert({ entity1,entity2 });
+						currentCollisions.insert({ entity2,entity1 });
 					}
 				}
 			}

@@ -50,6 +50,7 @@ namespace PitudoEngine {
 		static void logme(const std::string& text);
 
 		void CreateBorders();
+		void SetSignatures();
 	};
 
 }

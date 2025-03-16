@@ -34,6 +34,7 @@ namespace PitudoEngine {
 			}
 
 		}
+		//TO DO:: GENERA 2 MEMORY LEAKS POR LA PUTISIMA CARA
 		//RenderDebug(deltaTime);
 
 		tigrUpdate(m_Window);

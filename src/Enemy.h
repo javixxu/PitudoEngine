@@ -8,7 +8,10 @@ namespace SuperPangGame {
     {
         virtual ~IMovementBehavior() {}
         virtual void Move(Transform& transform, float deltaTime) = 0;
+        
+        virtual IMovementBehavior* Clone() const = 0;
         virtual void OnCollision() {};
+
     };
 
     struct OrthoMovement : public IMovementBehavior
@@ -17,6 +20,8 @@ namespace SuperPangGame {
 
         OrthoMovement(Vec2 _velocity);
         void Move(Transform& transform, float deltaTime) override;
+        IMovementBehavior* Clone() const override;
+
         void OnCollision() override;
         void InvertVelocity();
     };
@@ -27,7 +32,14 @@ namespace SuperPangGame {
         IMovementBehavior* m_movementBehavior; // Comportamiento de movimiento
         Enemy();
         Enemy(int numCollisions,IMovementBehavior* movement);
-        void OnCollisionCallBack(const Entity& _Msprite, const Entity& _Osprite);
+
+        Enemy(const Enemy& other) noexcept;
+        Enemy(Enemy&& other) noexcept;
+        Enemy& operator=(const Enemy& other) noexcept;
+        Enemy& operator=(Enemy&& other) noexcept;
+
+
+        static void OnCollisionCallBack(const Entity& _Msprite, const Entity& _Osprite);
         virtual ~Enemy();
     };
 

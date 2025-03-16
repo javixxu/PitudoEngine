@@ -24,7 +24,8 @@ namespace SuperPangGame {
 			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
 			auto& enemy = m_ecsManager->GetComponent<Enemy>(entity);
 
-			enemy.m_movementBehavior->Move(transform, deltaTime);
-		}
+			if(enemy.m_movementBehavior != nullptr)
+				enemy.m_movementBehavior->Move(transform, deltaTime);
+		} 
 	}
 }

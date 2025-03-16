@@ -65,32 +65,7 @@ namespace PitudoEngine {
     #endif
         
         //SIGNATURES
-        Signature signatureRenderSystem;
-        signatureRenderSystem.set(ecsManager->GetComponentType<Transform>());
-        signatureRenderSystem.set(ecsManager->GetComponentType<Sprite>());
-        ecsManager->SetSystemSignature<RenderSystem>(signatureRenderSystem);
-
-        Signature signatureRenderDebugSystem;
-        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Transform>());
-        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Collider>());
-        ecsManager->SetSystemSignature<RenderDebugSystem>(signatureRenderDebugSystem);
-
-        Signature signatureCollider;
-        signatureCollider.set(ecsManager->GetComponentType<Transform>());
-        signatureCollider.set(ecsManager->GetComponentType<Collider>());
-        ecsManager->SetSystemSignature<ColliderSystem>(signatureCollider);
-
-        Signature signaturePlayerSystem;
-        signaturePlayerSystem.set(ecsManager->GetComponentType<Transform>());
-        signaturePlayerSystem.set(ecsManager->GetComponentType<SuperPangGame::PlayerController>());
-        ecsManager->SetSystemSignature<SuperPangGame::PlayersSystem>(signaturePlayerSystem);
-
-        Signature signatureEnemySystem;
-        signatureEnemySystem.set(ecsManager->GetComponentType<Transform>());
-        signatureEnemySystem.set(ecsManager->GetComponentType<SuperPangGame::Enemy>());
-        signatureEnemySystem.set(ecsManager->GetComponentType<Collider>());
-        signatureEnemySystem.set(ecsManager->GetComponentType<Sprite>());
-        ecsManager->SetSystemSignature<SuperPangGame::EnemySystem>(signatureEnemySystem);
+        SetSignatures();
 
         //BACKGROUND
         auto entity = ecsManager->CreateEntity();
@@ -121,6 +96,19 @@ namespace PitudoEngine {
         Collider* coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_Size = sprite->getImageSize() / 2.0F;
 
+        //CREATE AND ENEMY
+
+        entity = ecsManager->CreateEntity();
+
+        ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/amarillo_g.png", Vec2(0.5f));
+        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
+        ecsManager->AddComponent<SuperPangGame::Enemy>(entity,4,new SuperPangGame::OrthoMovement({75,75}));
+        SuperPangGame::Enemy* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
+
+        coll = &ecsManager->GetComponent<Collider>(entity);
+        coll->m_Size = sprite->getImageSize() / 2.0f;
+        coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
 
         ////ENTITY 2
 
@@ -251,5 +239,35 @@ namespace PitudoEngine {
             ColliderShape::RECT, Vec2(0.5f), Vec2(BORDER_THICKNESS, SCREEN_HEIGHT), layer);
 
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers(layer, layer);
+    }
+   
+    void Engine::SetSignatures(){
+        //SIGNATURES
+        Signature signatureRenderSystem;
+        signatureRenderSystem.set(ecsManager->GetComponentType<Transform>());
+        signatureRenderSystem.set(ecsManager->GetComponentType<Sprite>());
+        ecsManager->SetSystemSignature<RenderSystem>(signatureRenderSystem);
+
+        Signature signatureRenderDebugSystem;
+        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Transform>());
+        signatureRenderDebugSystem.set(ecsManager->GetComponentType<Collider>());
+        ecsManager->SetSystemSignature<RenderDebugSystem>(signatureRenderDebugSystem);
+
+        Signature signatureCollider;
+        signatureCollider.set(ecsManager->GetComponentType<Transform>());
+        signatureCollider.set(ecsManager->GetComponentType<Collider>());
+        ecsManager->SetSystemSignature<ColliderSystem>(signatureCollider);
+
+        Signature signaturePlayerSystem;
+        signaturePlayerSystem.set(ecsManager->GetComponentType<Transform>());
+        signaturePlayerSystem.set(ecsManager->GetComponentType<SuperPangGame::PlayerController>());
+        ecsManager->SetSystemSignature<SuperPangGame::PlayersSystem>(signaturePlayerSystem);
+
+        Signature signatureEnemySystem;
+        signatureEnemySystem.set(ecsManager->GetComponentType<Transform>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<SuperPangGame::Enemy>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<Collider>());
+        signatureEnemySystem.set(ecsManager->GetComponentType<Sprite>());
+        ecsManager->SetSystemSignature<SuperPangGame::EnemySystem>(signatureEnemySystem);
     }
 }
