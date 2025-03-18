@@ -25,17 +25,17 @@ namespace PitudoEngine {
 			auto& collider = m_ecsManager->GetComponent<Collider>(entity);
 
 			if (collider.m_colliderShape == ColliderShape::RECT) {
-				Vec2 collPos = transform.position - (collider.m_Size * collider.m_pivot);
-				tigrFillRect(m_Window, (int)collPos.x, (int)collPos.y, (int)collider.m_Size.x, (int)collider.m_Size.y, tigrRGBA(0xFF, 0x00, 0xFF, 0x90));
+				Vec2 collPos = transform.position - (collider.m_size * collider.m_pivot);
+				tigrFillRect(m_Window, (int)collPos.x, (int)collPos.y, (int)collider.m_size.x, (int)collider.m_size.y, tigrRGBA(0xFF, 0x00, 0xFF, 0x90));
 			}
 			else {
 				Vec2 collPos = transform.position;
-				tigrFillCircle(m_Window, (int)collPos.x, (int)collPos.y, (int)collider.m_Size.x, tigrRGBA(0xFF, 0x00, 0xFF, 0x90));
+				tigrFillCircle(m_Window, (int)collPos.x, (int)collPos.y, (int)collider.m_size.x, tigrRGBA(0xFF, 0x00, 0xFF, 0x90));
 			}
 
 		}
 		//TO DO:: GENERA 2 MEMORY LEAKS POR LA PUTISIMA CARA
-		//RenderDebug(deltaTime);
+		RenderDebug(deltaTime);
 
 		tigrUpdate(m_Window);
 	}

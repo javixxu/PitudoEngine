@@ -3,27 +3,39 @@
 #include "Vec2.h"
 #include "Transform.h"
 using namespace PitudoEngine;
+class PitudoEngine::Transform;
 namespace SuperPangGame {
-    struct IMovementBehavior
-    {
+
+    struct IMovementBehavior{
+        Vec2 m_velocity; // Velocidad en cada eje
+
         virtual ~IMovementBehavior() {}
         virtual void Move(Transform& transform, float deltaTime) = 0;
         
         virtual IMovementBehavior* Clone() const = 0;
-        virtual void OnCollision() {};
+        virtual void OnCollision(const Transform& transform) {};
 
     };
 
-    struct OrthoMovement : public IMovementBehavior
-    {
-        Vec2 m_velocity; // Velocidad en cada eje
+    struct OrthoMovement : public IMovementBehavior{
+        bool m_change;
 
         OrthoMovement(Vec2 _velocity);
         void Move(Transform& transform, float deltaTime) override;
         IMovementBehavior* Clone() const override;
 
-        void OnCollision() override;
-        void InvertVelocity();
+        void OnCollision(const Transform& transform) override;
+    };
+
+    struct WaveMovement: public IMovementBehavior{
+        float m_gravity; 
+        float m_damping;  // Reduccion de la velocidad en cada rebote
+
+        WaveMovement(Vec2 _velocity, float gravity, float damping);
+        void Move(Transform& transform, float deltaTime) override;
+        IMovementBehavior* Clone() const override;
+
+        void OnCollision(const Transform& transform) override;
     };
 
     class Enemy :public Component {

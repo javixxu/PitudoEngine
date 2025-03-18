@@ -60,22 +60,22 @@ namespace PitudoEngine {
 
 
 
-    Collider::Collider() :m_transform(nullptr), m_colliderShape(ColliderShape::RECT), m_pivot(), m_Size(1) {
+    Collider::Collider() :m_transform(nullptr), m_colliderShape(ColliderShape::RECT), m_pivot(), m_size(1) {
     }
 
     Collider::Collider(const Transform* transform, ColliderShape colliderShape, Vec2 pivot, Vec2 size,std::string collisionLayer) :
         m_transform(transform), m_colliderShape(colliderShape),
-        m_pivot(pivot), m_Size(size),m_collisionLayer(collisionLayer) {
+        m_pivot(pivot), m_size(size),m_collisionLayer(collisionLayer) {
     }
 
     bool Collider::collides(const Collider& other) const {
         switch (m_colliderShape)
         {
         case ColliderShape::RECT:
-            return other.collides(m_transform->position - (m_Size * m_pivot), m_Size);
+            return other.collides(m_transform->position - (m_size * m_pivot), m_size);
             break;
         case ColliderShape::CIRCLE:
-            return other.collides(m_transform->position, m_Size.x);
+            return other.collides(m_transform->position, m_size.x);
             break;
         }
         return false;
@@ -86,10 +86,10 @@ namespace PitudoEngine {
         switch (m_colliderShape)
         {
         case ColliderShape::RECT:
-            return checkCircleRect(circlePos, circleRadius, m_transform->position - (m_Size * m_pivot), m_Size);
+            return checkCircleRect(circlePos, circleRadius, m_transform->position - (m_size * m_pivot), m_size);
             break;
         case ColliderShape::CIRCLE:
-            return checkCircleCircle(circlePos, circleRadius, m_transform->position, m_Size.x);
+            return checkCircleCircle(circlePos, circleRadius, m_transform->position, m_size.x);
             break;
         }
         return false;
@@ -99,10 +99,10 @@ namespace PitudoEngine {
         switch (m_colliderShape)
         {
         case ColliderShape::RECT:
-            return checkRectRect(rectPos, rectSize, m_transform->position - (m_Size * m_pivot), m_Size);
+            return checkRectRect(rectPos, rectSize, m_transform->position - (m_size * m_pivot), m_size);
             break;
         case ColliderShape::CIRCLE:
-            return checkCircleRect(m_transform->position, m_Size.x, rectPos, rectSize);
+            return checkCircleRect(m_transform->position, m_size.x, rectPos, rectSize);
             break;
         }
         return false;

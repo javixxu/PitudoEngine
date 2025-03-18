@@ -2,6 +2,9 @@
 #include <ecs/ECSManager.h>
 
 #include "Vec2.h"
+#include "Collider.h"
+#include "Engine.h"
+#include "Transform.h"
 
 using namespace PitudoEngine;
 
@@ -39,10 +42,41 @@ namespace SuperPangGame {
 		auto& ecsManager = ECSManager::getInstance();
 		SuperPangGame::Enemy& enemy1 = ecsManager.GetComponent<Enemy>(_Msprite);
 
-		if (enemy1.m_movementBehavior != nullptr) //POSIBLE CAMBIO DE MOVEMENT EN CASO DE COLLISION
-			enemy1.m_movementBehavior->OnCollision();
+		
+		Transform& mTransform = ecsManager.GetComponent<Transform>(_Msprite);
+		Transform& oTransform = ecsManager.GetComponent<Transform>(_Osprite);
 
+		Collider& mCollider = ecsManager.GetComponent<Collider>(_Msprite);
+		Collider& oCollider = ecsManager.GetComponent<Collider>(_Osprite);
+
+		Vec2 boxPosition = oTransform.position;
+		Vec2 circlePos = mTransform.position;
+		Vec2 halfSize = oCollider.m_size / 2.0f;
+		float radius = mCollider.m_size.x;
+
+		Vec2 closestPoint = {
+			std::max(boxPosition.x - halfSize.x, std::min(circlePos.x, boxPosition.x + halfSize.x)),
+			std::max(boxPosition.y - halfSize.y, std::min(circlePos.y, boxPosition.y + halfSize.y))
+		};
+
+		Vec2 delta = circlePos - closestPoint;
+		float dist = delta.Length();
+		float overlap = radius - dist;
+
+		if (overlap > 0) {
+			// Normalizamos el vector delta para obtener la dirección
+			Vec2 normal = delta.Normalize();
+
+			// Movemos `mTransform` fuera de la colisión
+			mTransform.position += normal * overlap;
+		}
+
+		if (enemy1.m_movementBehavior != nullptr) {//POSIBLE CAMBIO DE MOVEMENT EN CASO DE COLLISION
+			enemy1.m_movementBehavior->OnCollision(mTransform);
+		}
 		enemy1.m_numCollisions--; //reducir tamaño
+
+
 		if (enemy1.m_numCollisions <= 0) {
 			//TO DO:: ELIMINAR ENEMIGO
 		}
@@ -58,8 +92,9 @@ namespace SuperPangGame {
 
 
 	//enemigo movimiento ortogonal
-	OrthoMovement::OrthoMovement(Vec2 _velocity)
-		: m_velocity(_velocity) {
+	OrthoMovement::OrthoMovement(Vec2 _velocity) {
+		m_velocity = _velocity;
+		m_change =  std::rand() % 2;
 	}
 	void OrthoMovement::Move(Transform& transform, float deltaTime){
 		transform.position += m_velocity * deltaTime;
@@ -69,11 +104,36 @@ namespace SuperPangGame {
 		return new OrthoMovement(*this);
 	}
 
-	void OrthoMovement::OnCollision(){
-		InvertVelocity();
-	}
-	void OrthoMovement::InvertVelocity(){
-		m_velocity = Vec2() - m_velocity;
+	void OrthoMovement::OnCollision(const Transform& transform){
+		if (Engine::getWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
+			m_velocity.x = -m_velocity.x;
+		else m_velocity.y = -m_velocity.y;
 	}
 	//enemigo movimiento ortogonal
+
+	//enemigo burbuja
+	WaveMovement::WaveMovement(Vec2 _velocity, float gravity, float damping) : 
+		m_gravity(gravity), m_damping(damping) {
+		m_velocity = _velocity;
+	}
+
+	void WaveMovement::Move(Transform& transform, float deltaTime){
+		m_velocity.y += m_gravity * deltaTime;
+
+		transform.position += m_velocity * deltaTime;
+	}
+
+	IMovementBehavior* WaveMovement::Clone() const
+	{
+		return new WaveMovement(*this);
+	}
+
+	void WaveMovement::OnCollision(const Transform& transform){
+		if(Engine::getWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
+			m_velocity.x = -m_velocity.x;
+		else
+			m_velocity.y = m_damping;
+		//m_velocity = Vec2();
+	}
+	//enemigo burbuja
 }

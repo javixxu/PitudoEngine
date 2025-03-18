@@ -2,6 +2,9 @@
 #include <ecs/System.h>
 #include <unordered_map>
 namespace PitudoEngine {
+	class Transform;
+	class Collider;
+
 	class ColliderSystem :public System
 	{
 		std::unordered_map<std::string, std::string> m_ignoreLayers;

@@ -36,7 +36,7 @@ namespace PitudoEngine {
         ColliderShape m_colliderShape;
 
         Vec2 m_pivot; // Pivote delcollider (MAS FACIL DE CARA A VINCULARLO CON SPRITE)
-        Vec2 m_Size;  // Tamaño relativo al Transform
+        Vec2 m_size;  // Tamaño relativo al Transform
 
         std::string m_collisionLayer= "default";
 

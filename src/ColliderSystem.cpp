@@ -39,6 +39,7 @@ namespace PitudoEngine {
 
 						currentCollisions.insert({ entity1,entity2 });
 						currentCollisions.insert({ entity2,entity1 });
+
 					}
 				}
 			}

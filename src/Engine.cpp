@@ -27,6 +27,9 @@
 namespace PitudoEngine {
     bool Engine::Init(){
         m_bIsRunning = true;
+
+        std::srand(static_cast<unsigned>(std::time(nullptr))); // Inicializar semilla
+
         m_screen = tigrWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "PitudoEngine", 0);
         std::cout << "Initializing Tiger\n";
        
@@ -94,21 +97,41 @@ namespace PitudoEngine {
 
         sprite = &ecsManager->GetComponent<Sprite>(entity);
         Collider* coll = &ecsManager->GetComponent<Collider>(entity);
-        coll->m_Size = sprite->getImageSize() / 2.0F;
+        coll->m_size = sprite->getImageSize() / 2.0F;
 
-        //CREATE AND ENEMY
-
+        //CREATE ENEMY
         entity = ecsManager->CreateEntity();
 
         ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
         ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/amarillo_g.png", Vec2(0.5f));
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
-        ecsManager->AddComponent<SuperPangGame::Enemy>(entity,4,new SuperPangGame::OrthoMovement({75,75}));
+        ecsManager->AddComponent<SuperPangGame::Enemy>(entity,4,new SuperPangGame::OrthoMovement({90,90}));
         SuperPangGame::Enemy* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
+        trs = &ecsManager->GetComponent<Transform>(entity);
+        trs->scale = sprite->getImageSize();
 
         coll = &ecsManager->GetComponent<Collider>(entity);
-        coll->m_Size = sprite->getImageSize() / 2.0f;
+        coll->m_collisionLayer = "enemy";
+        coll->m_size = sprite->getImageSize() /2.0f;
         coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
+
+        //Enemy 2
+        entity = ecsManager->CreateEntity();
+
+        ecsManager->AddComponent<Transform>(entity, Vec2(150, 300), Vec2(1, 1), 0.0f);
+        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/rojo_g.png", Vec2(0.5f));
+        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
+        ecsManager->AddComponent<SuperPangGame::Enemy>(entity, 4, new SuperPangGame::WaveMovement({ 90,0 }, 40.0f, -80.0f));
+        enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
+        trs = &ecsManager->GetComponent<Transform>(entity);
+        trs->scale = sprite->getImageSize();
+
+        coll = &ecsManager->GetComponent<Collider>(entity);
+        coll->m_collisionLayer = "enemy";
+        coll->m_size.x = sprite->getImageSize().x;
+        coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
+
+        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
 
         ////ENTITY 2
 
@@ -269,5 +292,13 @@ namespace PitudoEngine {
         signatureEnemySystem.set(ecsManager->GetComponentType<Collider>());
         signatureEnemySystem.set(ecsManager->GetComponentType<Sprite>());
         ecsManager->SetSystemSignature<SuperPangGame::EnemySystem>(signatureEnemySystem);
+    }
+    int Engine::getWidth()
+    {
+        return SCREEN_WIDTH;
+    }
+    int Engine::getHeight()
+    {
+        return SCREEN_HEIGHT;
     }
 }

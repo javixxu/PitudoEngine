@@ -20,9 +20,7 @@ namespace PitudoEngine {
 		bool m_bIsRunning = false;
 
 		float m_deltaTime;
-		float fps = 144; //FPS: MOTOR
-
-		Sprite* sprite;
+		float fps = 30; //FPS: MOTOR
 
 		void Update();
 		//void Render();
@@ -51,6 +49,9 @@ namespace PitudoEngine {
 
 		void CreateBorders();
 		void SetSignatures();
+
+		static int getWidth();
+		static int getHeight();
 	};
 
 }
