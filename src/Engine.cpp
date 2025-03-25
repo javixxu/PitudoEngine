@@ -107,12 +107,14 @@ namespace PitudoEngine {
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
         ecsManager->AddComponent<SuperPangGame::Enemy>(entity,4,new SuperPangGame::OrthoMovement({90,90}));
         SuperPangGame::Enemy* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
+
         trs = &ecsManager->GetComponent<Transform>(entity);
+        sprite = &ecsManager->GetComponent<Sprite>(entity);
         trs->scale = sprite->getImageSize();
 
         coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_collisionLayer = "enemy";
-        coll->m_size = sprite->getImageSize() /2.0f;
+        coll->m_size = sprite->getImageSize() / 2.0f;
         coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
 
         //Enemy 2
@@ -124,11 +126,12 @@ namespace PitudoEngine {
         ecsManager->AddComponent<SuperPangGame::Enemy>(entity, 4, new SuperPangGame::WaveMovement({ 90,0 }, 40.0f, -80.0f));
         enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
         trs = &ecsManager->GetComponent<Transform>(entity);
+        sprite = &ecsManager->GetComponent<Sprite>(entity);
         trs->scale = sprite->getImageSize();
 
         coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_collisionLayer = "enemy";
-        coll->m_size.x = sprite->getImageSize().x;
+        coll->m_size = sprite->getImageSize()/ 2.0f;
         coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
 
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");

@@ -3,10 +3,8 @@
 
 #include "Vec2.h"
 #include "Collider.h"
+#include "Sprite.h"
 #include "Engine.h"
-#include "Transform.h"
-
-using namespace PitudoEngine;
 
 namespace SuperPangGame {
 	Enemy::Enemy():
@@ -79,9 +77,24 @@ namespace SuperPangGame {
 
 		if (enemy1.m_numCollisions <= 0) {
 			//TO DO:: ELIMINAR ENEMIGO
+			//ecsManager.DestroyEntity(_Msprite);
 		}
-		else{
-			//REDUCIR TAMAÑO
+		else {
+			//ecsManager.DestroyEntity(_Msprite);
+
+			////REDUCIR TAMAÑO
+			//auto newEnt = ecsManager.CreateEntity();
+			//ecsManager.AddComponent<Transform>(newEnt,mTransform.position,mTransform.scale,mTransform.rotation);
+			//ecsManager.AddComponent<PitudoEngine::Sprite>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), "../data/images/amarillo_s.png", Vec2(0.5f));
+			//ecsManager.AddComponent<Collider>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), ColliderShape::CIRCLE, Vec2(0.5f));
+			//ecsManager.AddComponent<Enemy>(newEnt, 4, new OrthoMovement({ 90,90 }));
+			//Enemy* enemy = &ecsManager.GetComponent<Enemy>(newEnt);
+
+			//auto coll = &ecsManager.GetComponent<Collider>(newEnt);
+			//auto sprite = &ecsManager.GetComponent<PitudoEngine::Sprite>(newEnt);
+			//coll->m_collisionLayer = "enemy";
+			//coll->m_size = sprite->getImageSize()/ 2.0f;
+			//coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
 		}
 	}
 
