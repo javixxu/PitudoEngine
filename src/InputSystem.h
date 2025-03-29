@@ -17,6 +17,5 @@ namespace PitudoEngine {
 		bool isKeyDown(int _key);
 		bool isKeyPressed(int _key);
 		Vec2 mousePosition();
-
 	};
 }

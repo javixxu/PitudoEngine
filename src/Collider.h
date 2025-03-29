@@ -25,7 +25,7 @@ namespace PitudoEngine {
     protected:
         const Transform* m_transform;
 
-        typedef void (*CollisionCallbackFunc)(const Entity& _Msprite,const Entity& _Osprite);
+        typedef void (*CollisionCallbackFunc)(const Entity& _MEntity, const Entity& _OEntity);
         CollisionCallbackFunc m_OnCollisionCallBack = nullptr;
 
         static bool checkCircleCircle(const Vec2& pos1, float radius1, const Vec2& pos2, float radius2);

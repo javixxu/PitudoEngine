@@ -2,6 +2,7 @@
 #include <ecs/ECSManager.h>
 #include "Transform.h"
 #include "Collider.h"
+#include "GameManagerSystem.h"
 
 namespace PitudoEngine {
 	ColliderSystem::ColliderSystem(){
@@ -14,7 +15,6 @@ namespace PitudoEngine {
 	void ColliderSystem::Update(float deltaTime) {
 		
 		std::unordered_map<Entity, Entity> currentCollisions;
-
 		for (auto& entity1 : mEntities) {
 			for (auto& entity2 : mEntities) {
 
@@ -36,10 +36,10 @@ namespace PitudoEngine {
 						//Send Collision Methods CallBacks
 						if (collider1.getOnCollisionCallback()) collider1.getOnCollisionCallback()(entity1,entity2);
 						if (collider2.getOnCollisionCallback()) collider2.getOnCollisionCallback()(entity2,entity1);
-
+						
 						currentCollisions.insert({ entity1,entity2 });
 						currentCollisions.insert({ entity2,entity1 });
-
+						
 					}
 				}
 			}

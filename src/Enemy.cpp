@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include <ecs/ECSManager.h>
+#include "GameManagerSystem.h"
 
 #include "Vec2.h"
 #include "Collider.h"
@@ -36,16 +37,16 @@ namespace SuperPangGame {
 	}
 
 
-	void Enemy::OnCollisionCallBack(const Entity& _Msprite, const Entity& _Osprite){
+	void Enemy::OnCollisionCallBack(const Entity& _MEntity, const Entity& _OEntity){
 		auto& ecsManager = ECSManager::getInstance();
-		SuperPangGame::Enemy& enemy1 = ecsManager.GetComponent<Enemy>(_Msprite);
+		SuperPangGame::Enemy& enemy1 = ecsManager.GetComponent<Enemy>(_MEntity);
 
 		
-		Transform& mTransform = ecsManager.GetComponent<Transform>(_Msprite);
-		Transform& oTransform = ecsManager.GetComponent<Transform>(_Osprite);
+		Transform& mTransform = ecsManager.GetComponent<Transform>(_MEntity);
+		Transform& oTransform = ecsManager.GetComponent<Transform>(_OEntity);
 
-		Collider& mCollider = ecsManager.GetComponent<Collider>(_Msprite);
-		Collider& oCollider = ecsManager.GetComponent<Collider>(_Osprite);
+		Collider& mCollider = ecsManager.GetComponent<Collider>(_MEntity);
+		Collider& oCollider = ecsManager.GetComponent<Collider>(_OEntity);
 
 		Vec2 boxPosition = oTransform.position;
 		Vec2 circlePos = mTransform.position;
@@ -74,27 +75,23 @@ namespace SuperPangGame {
 		}
 		enemy1.m_numCollisions--; //reducir tamaño
 
+		//DELETE THIS AND INSTANCE OTHER
+		ecsManager.GetSystem<GameManagerSystem>().AddEntitiesToDestroy(&_MEntity);
+		if (enemy1.m_numCollisions > 0) {
 
-		if (enemy1.m_numCollisions <= 0) {
-			//TO DO:: ELIMINAR ENEMIGO
-			//ecsManager.DestroyEntity(_Msprite);
-		}
-		else {
-			//ecsManager.DestroyEntity(_Msprite);
+			//REDUCIR TAMAÑO
+			/*auto newEnt = ecsManager.CreateEntity();
+			ecsManager.AddComponent<Transform>(newEnt,mTransform.position,mTransform.scale,mTransform.rotation);
+			ecsManager.AddComponent<PitudoEngine::Sprite>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), "../data/images/amarillo_s.png", Vec2(0.5f));
+			ecsManager.AddComponent<Collider>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), ColliderShape::CIRCLE, Vec2(0.5f));
+			ecsManager.AddComponent<Enemy>(newEnt, enemy1.m_numCollisions, new OrthoMovement({ 90,90 }));
+			Enemy* enemy = &ecsManager.GetComponent<Enemy>(newEnt);
 
-			////REDUCIR TAMAÑO
-			//auto newEnt = ecsManager.CreateEntity();
-			//ecsManager.AddComponent<Transform>(newEnt,mTransform.position,mTransform.scale,mTransform.rotation);
-			//ecsManager.AddComponent<PitudoEngine::Sprite>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), "../data/images/amarillo_s.png", Vec2(0.5f));
-			//ecsManager.AddComponent<Collider>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), ColliderShape::CIRCLE, Vec2(0.5f));
-			//ecsManager.AddComponent<Enemy>(newEnt, 4, new OrthoMovement({ 90,90 }));
-			//Enemy* enemy = &ecsManager.GetComponent<Enemy>(newEnt);
-
-			//auto coll = &ecsManager.GetComponent<Collider>(newEnt);
-			//auto sprite = &ecsManager.GetComponent<PitudoEngine::Sprite>(newEnt);
-			//coll->m_collisionLayer = "enemy";
-			//coll->m_size = sprite->getImageSize()/ 2.0f;
-			//coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
+			auto coll = &ecsManager.GetComponent<Collider>(newEnt);
+			auto sprite = &ecsManager.GetComponent<PitudoEngine::Sprite>(newEnt);
+			coll->m_collisionLayer = "enemy";
+			coll->m_size = sprite->getImageSize()/ 2.0f;
+			coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);*/
 		}
 	}
 

@@ -1,5 +1,7 @@
 #include "PlayerController.h"
 #include <tigr/tigr.h>
+#include <ecs/ECSManager.h>
+
 namespace SuperPangGame {
 	PlayerController::PlayerController() :m_keyMoveRight(TK_RIGHT), m_keyMoveLeft(TK_LEFT) {
 	}
@@ -13,5 +15,10 @@ namespace SuperPangGame {
 
 	float PlayerController::getSpeed() {
 		return m_speed;
+	}
+
+	void PlayerController::OnCollisionCallBack(const Entity& _MPlayer, const Entity& _Osprite)
+	{
+		
 	}
 }

@@ -16,7 +16,7 @@
 #include "PlayerController.h"
 #include "EnemySystem.h"
 #include "Enemy.h"
-
+#include "GameManagerSystem.h"
 //QUITAR
 
 #include "Transform.h"
@@ -47,6 +47,9 @@ namespace PitudoEngine {
         // TO DO:: QUITAR
         ecsManager->RegisterComponent<SuperPangGame::PlayerController>();
         ecsManager->RegisterComponent<SuperPangGame::Enemy>();
+
+        ecsManager->RegisterSystem<GameManagerSystem>();
+
         // TO DO:: QUITAR
 
         auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
@@ -106,8 +109,8 @@ namespace PitudoEngine {
         ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/amarillo_g.png", Vec2(0.5f));
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
         ecsManager->AddComponent<SuperPangGame::Enemy>(entity,4,new SuperPangGame::OrthoMovement({90,90}));
-        SuperPangGame::Enemy* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
 
+        auto* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
         trs = &ecsManager->GetComponent<Transform>(entity);
         sprite = &ecsManager->GetComponent<Sprite>(entity);
         trs->scale = sprite->getImageSize();
@@ -124,6 +127,7 @@ namespace PitudoEngine {
         ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/rojo_g.png", Vec2(0.5f));
         ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
         ecsManager->AddComponent<SuperPangGame::Enemy>(entity, 4, new SuperPangGame::WaveMovement({ 90,0 }, 40.0f, -80.0f));
+
         enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
         trs = &ecsManager->GetComponent<Transform>(entity);
         sprite = &ecsManager->GetComponent<Sprite>(entity);
@@ -134,26 +138,8 @@ namespace PitudoEngine {
         coll->m_size = sprite->getImageSize()/ 2.0f;
         coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
 
+
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
-
-        ////ENTITY 2
-
-        //entity = ecsManager->CreateEntity();
-
-        //ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
-        //ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/mrkrabs.png", Vec2(0.5f));
-        //ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::RECT, Vec2(0.5f));
-        //
-        //trs = &ecsManager->GetComponent<Transform>(entity);
-        //trs->scale = { 1.0f, 1.0f };
-
-        //sprite = &ecsManager->GetComponent<Sprite>(entity);
-        //coll = &ecsManager->GetComponent<Collider>(entity);
-        //coll->m_Size = sprite->getImageSize();
-
-
-
-
 
         //sprite = new Sprite();
         //std::string x("../data/safe.xml");
@@ -214,14 +200,19 @@ namespace PitudoEngine {
         //TO DO:: QUITAR
 
         ecsManager->GetSystem<InputSystem>().Update(m_deltaTime);
+
+        ecsManager->GetSystem<GameManagerSystem>().Update(m_deltaTime);
+
         ecsManager->GetSystem<SuperPangGame::PlayersSystem>().Update(m_deltaTime);
         ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
         ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
-        ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
-    #ifdef _DEBUG
-        ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
-    #endif
-        //ecsManager->UpdateSystems(m_deltaTime);
+
+        ecsManager->GetSystem<GameManagerSystem>().CleanEntities();
+
+    //    ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
+    //#ifdef _DEBUG
+    //    ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
+    //#endif
     }
 
     float Engine::Wait(float ms){

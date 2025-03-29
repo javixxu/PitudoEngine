@@ -16,5 +16,7 @@ namespace SuperPangGame {
 		~PlayerController();
 
 		float getSpeed();
+
+		static void OnCollisionCallBack(const Entity& _MPlayer, const Entity& _Osprite);
 	};
 }
