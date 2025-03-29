@@ -209,10 +209,10 @@ namespace PitudoEngine {
 
         ecsManager->GetSystem<GameManagerSystem>().CleanEntities();
 
-    //    ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
-    //#ifdef _DEBUG
-    //    ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
-    //#endif
+        ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
+    #ifdef _DEBUG
+        ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
+    #endif
     }
 
     float Engine::Wait(float ms){
