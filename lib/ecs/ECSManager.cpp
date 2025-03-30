@@ -21,6 +21,6 @@ Entity ECSManager::CreateEntity() {
 
 void ECSManager::DestroyEntity(Entity entity) {
     mEntityManager->DestroyEntity(entity);
-    mComponentManager->EntityDestroyed(entity);
+    //mComponentManager->EntityDestroyed(entity);
     mSystemManager->EntityDestroyed(entity);
 }

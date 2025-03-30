@@ -39,11 +39,12 @@ namespace SuperPangGame {
     };
 
     class Enemy :public Component {
-    public:
         int m_numCollisions; 
+    public:
+        int m_lifes;
         IMovementBehavior* m_movementBehavior; // Comportamiento de movimiento
         Enemy();
-        Enemy(int numCollisions,IMovementBehavior* movement);
+        Enemy(int lifes,IMovementBehavior* movement);
 
         Enemy(const Enemy& other) noexcept;
         Enemy(Enemy&& other) noexcept;

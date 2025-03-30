@@ -7,6 +7,6 @@ public:
 	~SpawnSystem();
 	void Update(float deltaTime) override;
 
-	Entity SpawnEntity(const Entity Entity);
+	Entity SpawnEnemy(const Entity Entity);
 };
 

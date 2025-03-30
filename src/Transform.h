@@ -9,9 +9,6 @@ namespace PitudoEngine {
     class Transform : public Component {
     public:
 
-        //Transform* parent = nullptr;   // Transformacion padre
-        //std::vector<Transform*> children; // Hijos
-
         Vec2 position{ 0, 0 };      // Posicion en el mundo
         Vec2 scale{ 1, 1 };         // Escala 
         float rotation{ 0.0f };     // Rotacion en grados o radianes
@@ -24,8 +21,5 @@ namespace PitudoEngine {
         Transform(Transform&& other) = default;
         Transform& operator=(const Transform& other) = default;
         Transform& operator=(Transform&& other) = default;
-
-        //void SetParent(Transform* newParent);
-        //void RemoveChild(Transform* child);  
     };
 }

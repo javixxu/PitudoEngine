@@ -6,14 +6,17 @@
 #include "Collider.h"
 #include "Sprite.h"
 #include "Engine.h"
+#include "EnemySystem.h"
 
 namespace SuperPangGame {
 	Enemy::Enemy():
-		m_movementBehavior(nullptr),m_numCollisions(1){
+		m_movementBehavior(nullptr),m_lifes(1){
+		m_numCollisions = m_lifes;
 	}
 
-	Enemy::Enemy(int numCollisions, IMovementBehavior* movement):
-		m_movementBehavior(movement),m_numCollisions(numCollisions) {
+	Enemy::Enemy(int lifes, IMovementBehavior* movement):
+		m_movementBehavior(movement),m_lifes(lifes) {
+		m_numCollisions = m_lifes;
 	}
 
 	Enemy::Enemy(const Enemy& other) noexcept{
@@ -25,12 +28,16 @@ namespace SuperPangGame {
 	}
 
 	Enemy& Enemy::operator=(const Enemy& other) noexcept{
+		this->m_numCollisions = other.m_numCollisions;
+		this->m_lifes = other.m_lifes;
 		this->m_movementBehavior = other.m_movementBehavior->Clone();
 		return *this;
 	}
 
 	Enemy& Enemy::operator=(Enemy&& other) noexcept
 	{
+		this->m_numCollisions = other.m_numCollisions;
+		this->m_lifes = other.m_lifes;
 		this->m_movementBehavior = other.m_movementBehavior;
 		other.m_movementBehavior = nullptr;
 		return *this;
@@ -73,26 +80,23 @@ namespace SuperPangGame {
 		if (enemy1.m_movementBehavior != nullptr) {//POSIBLE CAMBIO DE MOVEMENT EN CASO DE COLLISION
 			enemy1.m_movementBehavior->OnCollision(mTransform);
 		}
-		enemy1.m_numCollisions--; //reducir tamaño
 
-		//DELETE THIS AND INSTANCE OTHER
-		ecsManager.GetSystem<GameManagerSystem>().AddEntitiesToDestroy(&_MEntity);
-		if (enemy1.m_numCollisions > 0) {
+		enemy1.m_numCollisions--; //reducion rebotes
 
-			//REDUCIR TAMAÑO
-			/*auto newEnt = ecsManager.CreateEntity();
-			ecsManager.AddComponent<Transform>(newEnt,mTransform.position,mTransform.scale,mTransform.rotation);
-			ecsManager.AddComponent<PitudoEngine::Sprite>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), "../data/images/amarillo_s.png", Vec2(0.5f));
-			ecsManager.AddComponent<Collider>(newEnt, &ecsManager.GetComponent<Transform>(newEnt), ColliderShape::CIRCLE, Vec2(0.5f));
-			ecsManager.AddComponent<Enemy>(newEnt, enemy1.m_numCollisions, new OrthoMovement({ 90,90 }));
-			Enemy* enemy = &ecsManager.GetComponent<Enemy>(newEnt);
+		if(enemy1.m_numCollisions <= 0 ){
+		
+			enemy1.m_numCollisions = enemy1.m_lifes;
 
-			auto coll = &ecsManager.GetComponent<Collider>(newEnt);
-			auto sprite = &ecsManager.GetComponent<PitudoEngine::Sprite>(newEnt);
-			coll->m_collisionLayer = "enemy";
-			coll->m_size = sprite->getImageSize()/ 2.0f;
-			coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);*/
+			enemy1.m_lifes--;  //reducir tamaño
+
+			//DELETE THIS AND INSTANCE OTHER
+			ecsManager.GetSystem<GameManagerSystem>().AddEntitiesToDestroy(&_MEntity);
+
+			if (enemy1.m_lifes > 0) {
+				ecsManager.GetSystem<EnemySystem>().CreateFromOther(_MEntity);
+			}
 		}
+
 	}
 
 	Enemy::~Enemy() {

@@ -8,16 +8,16 @@
 struct Tigr;
 namespace PitudoEngine {
 	class Sprite : public Component {
-		Tigr* image = nullptr;
+		Tigr* m_image = nullptr;
 	protected:
-		std::string texture_file;
+		std::string m_texture_file;
 		const Transform* m_transform;
 
-		int m_hframes;               // Numero de frames en horizontal
-		int m_vframes;               // Numero de frames en vertical
+		//int m_hframes;               // Numero de frames en horizontal
+		//int m_vframes;               // Numero de frames en vertical
 
-		int m_fps;                   // Frames por segundo
-		float m_currentFrame;        // Frame actual
+		//int m_fps;                   // Frames por segundo
+		//float m_currentFrame;        // Frame actual
 	public:
 		Vec2 m_pivot;
 
@@ -33,6 +33,8 @@ namespace PitudoEngine {
 		void Draw(Tigr* window) const;
 		void ChangeTexture(const std::string& fileName);
 		const Vec2 getImageSize();
+
+		std::string getPath();
 
 		static bool Load(std::string& fileName, Sprite& obj);
 		static bool Save(std::string& fileName, const Sprite& obj);

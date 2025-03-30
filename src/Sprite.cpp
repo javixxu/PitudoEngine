@@ -6,17 +6,17 @@
 #include <iostream>
 
 namespace PitudoEngine {
-	Sprite::Sprite() :image(nullptr), m_transform(nullptr), m_pivot() {
+	Sprite::Sprite() :m_image(nullptr), m_transform(nullptr), m_pivot() {
 	}
 
 	Sprite::Sprite(const Transform* transform, const std::string& fileName, Vec2 pivot) :
-		image(nullptr), m_pivot(pivot), m_transform(transform) {
+		m_image(nullptr), m_pivot(pivot), m_transform(transform) {
 		ChangeTexture(fileName);
 	}
 
 	Sprite::~Sprite() {
-		if (image)
-			tigrFree(image);
+		if (m_image)
+			tigrFree(m_image);
 	}
 
 	Sprite::Sprite(const Sprite& other) noexcept {
@@ -30,40 +30,45 @@ namespace PitudoEngine {
 	Sprite& Sprite::operator=(const Sprite& other) noexcept {
 		this->m_pivot = other.m_pivot;
 		this->m_transform = other.m_transform;
-		this->ChangeTexture(other.texture_file);
+		this->ChangeTexture(other.m_texture_file);
 		return *this;
 	}
 
 	Sprite& Sprite::operator=(Sprite&& other) noexcept {
-		this->image = other.image;
-		other.image = nullptr;
+		this->m_image = other.m_image;
+		other.m_image = nullptr;
 
 		this->m_transform = other.m_transform;
 		other.m_transform = nullptr;
 
-		this->texture_file = other.texture_file;
+		this->m_texture_file = other.m_texture_file;
 		this->m_pivot = other.m_pivot;
 		return *this;
 	}
 
 	void Sprite::Draw(Tigr* window) const {
-		assert(image && "MSprite::Draw - Texture is nullptr!");
+		assert(m_image && "MSprite::Draw - Texture is nullptr!");
 
-		tigrBlitAlpha(window, image, (int)(m_transform->position.x - (image->w * m_pivot.x)), 
-			(int)(m_transform->position.y - (image->h * m_pivot.y)), 0, 0, image->w, image->h,1.0f);
+		tigrBlitAlpha(window, m_image, (int)(m_transform->position.x - (m_image->w * m_pivot.x)), 
+			(int)(m_transform->position.y - (m_image->h * m_pivot.y)), 0, 0, m_image->w, m_image->h,1.0f);
 	}
 
 	void Sprite::ChangeTexture(const std::string& fileName) { 
-		texture_file = fileName;
-		if (image)
-			tigrFree(image);
+		m_texture_file = fileName;
+		if (m_image)
+			tigrFree(m_image);
 
-		image = tigrLoadImage(texture_file.c_str());
+		m_image = tigrLoadImage(m_texture_file.c_str());
 	}
 
 	const Vec2 Sprite::getImageSize()
 	{
-		return Vec2((float)image->w, (float)image->h);
+		return Vec2((float)m_image->w, (float)m_image->h);
+	}
+
+	std::string Sprite::getPath()
+	{
+		return m_texture_file;
 	}
 
 	bool Sprite::Load(std::string& fileName, Sprite& obj) {
@@ -93,7 +98,7 @@ namespace PitudoEngine {
 
 		node.append_attribute("pivot_x").set_value(obj.m_pivot.x);
 		node.append_attribute("pivot_y").set_value(obj.m_pivot.y);
-		node.append_attribute("texture_file").set_value(obj.texture_file.c_str());
+		node.append_attribute("texture_file").set_value(obj.m_texture_file.c_str());
 
 		try {
 			std::ofstream file(fileName);
