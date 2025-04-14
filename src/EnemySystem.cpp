@@ -1,5 +1,6 @@
 #include "EnemySystem.h"
 #include <ecs/ECSManager.h>
+#include "ReadFilesSystem.h"
 #include "Engine.h"
 
 #include <vector>
@@ -18,6 +19,7 @@ namespace SuperPangGame {
 	}
 
 	EnemySystem::~EnemySystem(){
+		for (auto* prefab : m_prefabs)delete prefab;
 		m_prefabs.clear();
 	}
 
@@ -80,30 +82,20 @@ namespace SuperPangGame {
 	}
 
 	void EnemySystem::CreateNewEnemy(){
-		//int randomIndex = std::rand() % m_prefabs.size();
+		int randomIndex = std::rand() % m_prefabs.size();
 
-		//auto newEnt = m_ecsManager->CreateEntity();
+		Entity newEnt = m_ecsManager->CreateEntity();
 
-		//m_ecsManager->AddComponent<Transform>(newEnt, Vec2(std::rand() % Engine::getWidth() - 100,  std::rand() % Engine::getHeight() - 100), Vec2(1.0,1.0),0.0f);
+		// Ejecutar cada lambda almacenada para construir los componentes en la nueva entidad
+		for (const auto& constructor : m_prefabs[randomIndex]->componentConstructors) {
+			constructor(newEnt);
+		}
+		auto& newTransform = m_ecsManager->GetComponent<Transform>(newEnt);
 
-		//auto& newTransform = m_ecsManager->GetComponent<Transform>(newEnt);
-
-
-		//m_ecsManager->AddComponent<PitudoEngine::Sprite>(newEnt, &newTransform, "newPath", Vec2(0.5f));
-		//m_ecsManager->AddComponent<Collider>(newEnt, &newTransform, ColliderShape::CIRCLE, Vec2(0.5f));
-
-		//auto& coll = m_ecsManager->GetComponent<Collider>(newEnt);
-		//auto& nsprite = m_ecsManager->GetComponent<PitudoEngine::Sprite>(newEnt);
-		//coll.m_collisionLayer = "enemy";
-		//coll.m_size = nsprite.getImageSize() / 2.0f;
-		//
-		//// Clonar el comportamiento de movimiento si existe
-		//m_ecsManager->AddComponent<Enemy>(newEnt,m_prefabs[randomIndex]->m_lifes, m_prefabs[randomIndex]->m_movementBehavior->Clone());
-		//auto& enemy = m_ecsManager->GetComponent<Enemy>(newEnt);
-		//coll.SetOnCollisionCallback(&enemy.OnCollisionCallBack);
+		newTransform.position = Vec2(std::rand() % Engine::getWidth() - 100, std::rand() % Engine::getHeight() - 100);
 	}
 
-	void EnemySystem::SetEnemyPrefabs(const std::vector<Entity>& enemyPrefabs){
+	void EnemySystem::SetEnemyPrefabs(std::vector<PitudoEngine::PrefabData*> enemyPrefabs){
 		m_prefabs = enemyPrefabs;
 	}
 

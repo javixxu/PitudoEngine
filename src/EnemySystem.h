@@ -1,6 +1,11 @@
 #pragma once
 #include <ecs/System.h>
 #include <vector>
+#include <string>
+
+namespace PitudoEngine {
+	struct PrefabData;
+}
 
 namespace SuperPangGame {
 	class Enemy;
@@ -9,7 +14,7 @@ namespace SuperPangGame {
 		float m_timeSpawn = 5.0f;
 		float m_currentTimeSpawn;
 
-		std::vector<Entity> m_prefabs;
+		std::vector<PitudoEngine::PrefabData*> m_prefabs;
 	public:
 		EnemySystem();
 		~EnemySystem();
@@ -18,6 +23,6 @@ namespace SuperPangGame {
 		void CreateFromOther(Entity oldEnemy);
 		void CreateNewEnemy();
 
-		void SetEnemyPrefabs(const std::vector<Entity>& enemyPrefabs);
+		void SetEnemyPrefabs(std::vector<PitudoEngine::PrefabData*> enemyPrefabs);
 	};
 }
