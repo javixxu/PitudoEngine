@@ -17,7 +17,6 @@ namespace PitudoEngine {
 		std::unordered_map<Entity, Entity> currentCollisions;
 		for (auto& entity1 : mEntities) {
 			for (auto& entity2 : mEntities) {
-
 				bool ignoreCollision = (currentCollisions.find(entity1) != currentCollisions.end() &&
 					currentCollisions[entity1] == entity2);
 

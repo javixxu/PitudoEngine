@@ -1,9 +1,10 @@
 #include "Sprite.h"
 #include <cassert>
 #include <fstream>
+
 #include <tigr/tigr.h>
-#include <pugixml/pugixml.hpp>
 #include <iostream>
+#include <ecs/ECSManager.h>
 
 namespace PitudoEngine {
 	Sprite::Sprite() :m_image(nullptr), m_transform(nullptr), m_pivot() {
@@ -17,6 +18,25 @@ namespace PitudoEngine {
 	Sprite::~Sprite() {
 		if (m_image)
 			tigrFree(m_image);
+	}
+
+	void Sprite::ReadData(const std::unordered_map<std::string, std::string>& values, Entity e){
+
+		auto itFile = values.find("texture");
+		if (itFile != values.end()) {
+			ChangeTexture(itFile->second);
+		}
+
+		m_pivot.x = std::stof(values.at("pivot_x"));
+		m_pivot.y = std::stof(values.at("pivot_y"));
+	
+
+		auto transform = &ECSManager::getInstance().GetComponent<Transform>(e);
+		assert(transform && "Transform Not Found Reading Data.");
+
+		m_transform = transform;
+
+		printf("Sprite Read, %d\n", e);
 	}
 
 	Sprite::Sprite(const Sprite& other) noexcept {
@@ -69,50 +89,5 @@ namespace PitudoEngine {
 	std::string Sprite::getPath()
 	{
 		return m_texture_file;
-	}
-
-	bool Sprite::Load(std::string& fileName, Sprite& obj) {
-		pugi::xml_document doc;
-		pugi::xml_parse_result result = doc.load_file(fileName.c_str());
-
-		if (!result) {
-			return false;
-		}
-
-		pugi::xml_node node = doc.child("Sprite");
-		if (!node) {
-			return false;
-		}
-
-		obj.m_pivot.x = node.attribute("pivot_x").as_float();
-		obj.m_pivot.y = node.attribute("pivot_y").as_float();
-
-		obj.ChangeTexture(node.attribute("texture_file").as_string());
-
-		return true;
-	}
-
-	bool Sprite::Save(std::string& fileName, const Sprite& obj) {
-		pugi::xml_document doc;
-		pugi::xml_node node = doc.append_child("Sprite");
-
-		node.append_attribute("pivot_x").set_value(obj.m_pivot.x);
-		node.append_attribute("pivot_y").set_value(obj.m_pivot.y);
-		node.append_attribute("texture_file").set_value(obj.m_texture_file.c_str());
-
-		try {
-			std::ofstream file(fileName);
-			if (!file.is_open()) {
-				return false;
-			}
-
-			doc.save(file);
-			file.close();
-
-			return true;
-		}
-		catch (...) {
-			return false;
-		}
 	}
 }

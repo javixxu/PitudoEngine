@@ -15,6 +15,8 @@ namespace SuperPangGame {
 		PlayerController(float playerSpeed, int playerKeyRight, int playerKeyLeft);
 		~PlayerController();
 
+		void ReadData(const std::unordered_map<std::string, std::string>& values, Entity e) override;
+
 		float getSpeed();
 
 		static void OnCollisionCallBack(const Entity& _MPlayer, const Entity& _Osprite);

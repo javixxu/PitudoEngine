@@ -14,7 +14,6 @@ namespace SuperPangGame {
         
         virtual IMovementBehavior* Clone() const = 0;
         virtual void OnCollision(const Transform& transform) {};
-
     };
 
     struct OrthoMovement : public IMovementBehavior{
@@ -45,6 +44,8 @@ namespace SuperPangGame {
         IMovementBehavior* m_movementBehavior; // Comportamiento de movimiento
         Enemy();
         Enemy(int lifes,IMovementBehavior* movement);
+
+        void ReadData(const std::unordered_map<std::string, std::string>& values, Entity e) override;
 
         Enemy(const Enemy& other) noexcept;
         Enemy(Enemy&& other) noexcept;

@@ -17,6 +17,8 @@ namespace PitudoEngine {
         Transform(const Vec2& pos, const Vec2& sc, float rot);
         ~Transform() = default;
 
+        void ReadData(const std::unordered_map<std::string, std::string>& values, Entity e) override;
+
         Transform(const Transform& other) = default;
         Transform(Transform&& other) = default;
         Transform& operator=(const Transform& other) = default;

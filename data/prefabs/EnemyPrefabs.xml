@@ -1,0 +1,17 @@
+<Entities>
+    <!-- ENEMY 1: OrthoMovement -->
+    <Entity name="Enemy1">
+        <Transform pos_x="600" pos_y="300" scale_x="1" scale_y="1" rotation="0" />
+        <Sprite texture="../data/images/amarillo_3.png" pivot_x="0.5" pivot_y="0.5" />
+        <Collider shape="CIRCLE" size_x="0.0" size_y="0.0" layer="enemy" pivot_x="0.5" pivot_y="0.5" image_size = "true"/>
+        <Enemy lifes="3" movement="ortho" velocity_x="90" velocity_y="90" />
+    </Entity>
+
+    <!-- ENEMY 2: WaveMovement -->
+    <Entity name="Enemy2">
+        <Transform pos_x="200" pos_y="300" scale_x="1" scale_y="1" rotation="0" />
+        <Sprite texture="../data/images/rojo_4.png" pivot_x="0.5" pivot_y="0.5" />
+        <Collider shape="CIRCLE" size_x="0.0" size_y="0.0" layer="enemy" pivot_x="0.5" pivot_y="0.5" image_size = "true"/>
+        <Enemy lifes="4" movement="wave" velocity_x="120" velocity_y="0" gravity="80.0" damping="-160.0" />
+    </Entity>
+</Entities>

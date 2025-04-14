@@ -1,0 +1,8 @@
+<Entities>
+    <Entity name="Player">
+        <Transform pos_x="400" pos_y="570" scale_x="1" scale_y="1" rotation="0" />
+        <Sprite texture="../data/images/player/Idle.png" pivot_x="0.5" pivot_y="0.5" />
+        <Collider shape="CIRCLE" size_x="0.0" size_y="0.0" layer="player" pivot_x="0.5" pivot_y="0.5" image_size = "true"/>
+        <PlayerController speed="150.0" key_right="172" key_left="170" />
+    </Entity>
+</Entities>

@@ -1,46 +1,68 @@
 #include "ReadFilesSystem.h"
-#include <pugixml/pugixml.hpp>
-#include <map>
 #include <iostream>
-void ReadFilesSystem::ReadXML(const std::string& xml_file){
-    pugi::xml_document doc;
 
-    // Cargar el archivo XML
-    if (!doc.load_file(xml_file.c_str())) {
-        std::cerr << "Error loading XML file with Name: "<< xml_file << std::endl;
-        return;
+#include <ecs/ecsDefinitions.h>
+namespace PitudoEngine {
+
+    ReadFilesSystem::ReadFilesSystem(){
     }
-    for (pugi::xml_node entityNode : doc.child("Entities").children("Entity")) {
-        std::string tag = entityNode.attribute("tag").as_string();
 
-        //TO DO:: CREAR ENTIDAD
+    ReadFilesSystem::~ReadFilesSystem(){
+    }
 
-        // Iterar sobre los componentes de la entidad (cada nodo hijo de la entidad es un componente)
-        for (pugi::xml_node componentNode : entityNode.children()) {
-            std::string componentName = componentNode.name();
-            std::map<std::string, ComponentValue> componentValues;
+    void ReadFilesSystem::ReadSceneXML(const std::string& xml_file) {
+        pugi::xml_document doc;
+        if (!doc.load_file(xml_file.c_str())) {
+            std::cerr << "Error loading XML file: " << xml_file << std::endl;
+            return;
+        }
 
-            // Iterar sobre los atributos de cada componente
-            for (pugi::xml_attribute attr : componentNode.attributes()) {
-                std::string attributeName = attr.name();
-                ComponentValue value;
+        pugi::xml_node root = doc.child("Entities");
+        for (pugi::xml_node entityNode : root.children("Entity")) {
+            Entity e = m_ecsManager->CreateEntity();
 
-                // Determinar el tipo de dato del atributo y almacenarlo en el mapa correspondiente
-                if (attr.as_int() != 0 || attr.as_string()[0] == '0') {
-                    value = attr.as_int();
-                }
-                else if (attr.as_float() != 0.0f) {
-                    value = attr.as_float();
+            // Recorremos los hijos que son componentes
+            for (pugi::xml_node componentNode : entityNode.children()) {
+                std::string componentName = componentNode.name();
+
+                auto it = componentFactory.find(componentName);
+                if (it != componentFactory.end()) {
+                    it->second(e, componentNode);
                 }
                 else {
-                    value = attr.as_string();
+                    std::cerr << "No factory registered for component: " << componentName << std::endl;
                 }
-
-                componentValues[attributeName] = value;
             }
-
-            // TO DO:: CREAR UN COMPOENENTE DEL TIPO Y ASOCIARLO CON LA ENTIDAD
         }
-        
+    }
+    std::vector<Entity>& ReadFilesSystem::ReadPrefabs(const std::string& xml_file){
+        std::vector<Entity> prefabs;
+
+        pugi::xml_document doc;
+        if (!doc.load_file(xml_file.c_str())) {
+            std::cerr << "Error loading XML file: " << xml_file << std::endl;
+            return  prefabs;
+        }
+
+        pugi::xml_node root = doc.child("Entities");
+        for (pugi::xml_node entityNode : root.children("Entity")) {
+            Entity e = m_ecsManager->CreateEntity();
+
+            // Recorremos los hijos que son componentes
+            for (pugi::xml_node componentNode : entityNode.children()) {
+                std::string componentName = componentNode.name();
+
+                auto it = componentFactory.find(componentName);
+                if (it != componentFactory.end()) {
+                    it->second(e, componentNode);
+                }
+                else {
+                    std::cerr << "No factory registered for component: " << componentName << std::endl;
+                }
+            }
+            prefabs.push_back(e);
+        }
+
+        return prefabs;
     }
 }

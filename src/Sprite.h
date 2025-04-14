@@ -25,6 +25,8 @@ namespace PitudoEngine {
 		Sprite(const Transform* transform, const std::string& fileName, Vec2 pivot = Vec2(0.5f));
 		~Sprite();
 
+		void ReadData(const std::unordered_map<std::string, std::string>& values,Entity e) override;
+
 		Sprite(const Sprite& other) noexcept;
 		Sprite(Sprite&& other) noexcept;
 		Sprite& operator=(const Sprite& other) noexcept;
@@ -35,8 +37,5 @@ namespace PitudoEngine {
 		const Vec2 getImageSize();
 
 		std::string getPath();
-
-		static bool Load(std::string& fileName, Sprite& obj);
-		static bool Save(std::string& fileName, const Sprite& obj);
 	};
 }

@@ -1,4 +1,7 @@
 #include "Collider.h"
+#include "ecs/ECSManager.h"
+#include "Sprite.h"
+
 namespace PitudoEngine {
     bool Collider::checkCircleCircle(const Vec2& pos1, float radius1, const Vec2& pos2, float radius2)
     {
@@ -66,6 +69,35 @@ namespace PitudoEngine {
     Collider::Collider(const Transform* transform, ColliderShape colliderShape, Vec2 pivot, Vec2 size,std::string collisionLayer) :
         m_transform(transform), m_colliderShape(colliderShape),
         m_pivot(pivot), m_size(size),m_collisionLayer(collisionLayer) {
+    }
+
+    void Collider::ReadData(const std::unordered_map<std::string, std::string>& values, Entity e) {
+
+        auto shapeIt = values.find("shape");
+        if (shapeIt != values.end()) {
+            const std::string& shapeStr = shapeIt->second;
+            m_colliderShape = (shapeStr == "CIRCLE") ? ColliderShape::CIRCLE : ColliderShape::RECT;
+        }
+
+        m_size.x = std::stof(values.at("size_x"));
+        m_size.y = std::stof(values.at("size_y"));
+     
+        auto layerIt = values.find("layer");
+        if (layerIt != values.end()) m_collisionLayer = layerIt->second;
+
+        auto imageSize = values.find("image_size");
+        if (imageSize != values.end() && imageSize->second == "true") {
+            auto* sprite = &ECSManager::getInstance().GetComponent<Sprite>(e);
+
+            assert(sprite && "Sprite Not Found Reading Data.");
+            m_size = sprite->getImageSize() / 2.0f;
+        }
+
+        auto transform = &ECSManager::getInstance().GetComponent<Transform>(e);
+        assert(transform && "Transform Not Found Reading Data.");
+
+        m_transform = transform;
+        printf("Collider Read, %d\n", e);
     }
 
     bool Collider::collides(const Collider& other) const {

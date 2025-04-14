@@ -18,10 +18,6 @@ namespace SuperPangGame {
 	}
 
 	EnemySystem::~EnemySystem(){
-		for (auto* enemy: m_prefabs){
-			delete enemy;
-			enemy = nullptr;
-		}
 		m_prefabs.clear();
 	}
 
@@ -76,7 +72,7 @@ namespace SuperPangGame {
 			coll.SetOnCollisionCallback(&enemy.OnCollisionCallBack);
 
 			// Establecer velocidad en direcciones opuestas
-			if (movementBehavior)
+			if (movementBehavior && oldEnemy->m_movementBehavior)
 			{
 				movementBehavior->m_velocity.x = oldEnemy->m_movementBehavior->m_velocity.x * i; // Velocidad positiva o negativa
 			}
@@ -107,7 +103,8 @@ namespace SuperPangGame {
 		//coll.SetOnCollisionCallback(&enemy.OnCollisionCallBack);
 	}
 
-	void EnemySystem::SetEnemyPrefab(Enemy* enemyPrefab){
-
+	void EnemySystem::SetEnemyPrefabs(const std::vector<Entity>& enemyPrefabs){
+		m_prefabs = enemyPrefabs;
 	}
+
 }

@@ -6,18 +6,19 @@
 
 #include "Vec2.h"
 
-#include "RenderSystem.h"
-#include "RenderDebugSystem.h"
+#include "GameManagerSystem.h"
+#include "ReadFilesSystem.h"
 #include "InputSystem.h"
 #include "ColliderSystem.h"
+#include "RenderSystem.h"
+#include "RenderDebugSystem.h"
 
-//QUITAR
+//GAME
 #include "PlayersSystem.h"
 #include "PlayerController.h"
 #include "EnemySystem.h"
 #include "Enemy.h"
-#include "GameManagerSystem.h"
-//QUITAR
+//GAME
 
 #include "Transform.h"
 #include "Sprite.h"
@@ -40,35 +41,12 @@ namespace PitudoEngine {
     }
 
     void Engine::SetUp(){
-        ecsManager->RegisterComponent<Transform>();
-        ecsManager->RegisterComponent<Sprite>();
-        ecsManager->RegisterComponent<Collider>();
 
-        // TO DO:: QUITAR
-        ecsManager->RegisterComponent<SuperPangGame::PlayerController>();
-        ecsManager->RegisterComponent<SuperPangGame::Enemy>();
+        //REGISTER AND INIT SYSTEMS
+        RegisterSystems();
 
-        ecsManager->RegisterSystem<GameManagerSystem>();
-
-        // TO DO:: QUITAR
-
-        auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
-        inputSystem->setContext(m_screen); //PRIMERO EN REGISTRAR PUES ES EL INPUT
-
-        // TO DO:: QUITAR
-        auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
-        auto enemysSystem = ecsManager->RegisterSystem<SuperPangGame::EnemySystem>();
-        // TO DO:: QUITAR
-
-        auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
-
-        auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
-        renderSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
-
-    #ifdef _DEBUG
-        auto renderDebugSystem = ecsManager->RegisterSystem<RenderDebugSystem>();
-        renderDebugSystem->setContext(m_screen); //ULTIMO EN REGISTRAR PUES LA RENDERIZACION ES LO ULTIMO DEL BUCLE DE JUEGO
-    #endif
+        //REGISTER COMPONENTS
+        RegisterComponents();
         
         //SIGNATURES
         SetSignatures();
@@ -87,20 +65,11 @@ namespace PitudoEngine {
         //BORDER COLLIDERS
         CreateBorders();
 
-        //PLAYER 
-        entity = ecsManager->CreateEntity();
+        auto readfilesystem = &ecsManager->GetSystem<ReadFilesSystem>();
+        readfilesystem->ReadSceneXML("../data/Scene.xml");
 
-        ecsManager->AddComponent<Transform>(entity, Vec2(400,570), Vec2(1,1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/player/Idle.png",Vec2(0.5f));
-        ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity),ColliderShape::CIRCLE,Vec2(0.5f));
-        ecsManager->AddComponent<SuperPangGame::PlayerController>(entity);
-
-        trs = &ecsManager->GetComponent<Transform>(entity);
-        trs->scale = { 1.0f, 1.0f };
-
-        sprite = &ecsManager->GetComponent<Sprite>(entity);
-        Collider* coll = &ecsManager->GetComponent<Collider>(entity);
-        coll->m_size = sprite->getImageSize() / 2.0F;
+        auto enemySystem = &ecsManager->GetSystem<SuperPangGame::EnemySystem>();
+        enemySystem->SetEnemyPrefabs(readfilesystem->ReadPrefabs("../data/prefabs/EnemyPrefabs.xml"));
 
         //CREATE ENEMY
         entity = ecsManager->CreateEntity();
@@ -115,7 +84,7 @@ namespace PitudoEngine {
         sprite = &ecsManager->GetComponent<Sprite>(entity);
         trs->scale = sprite->getImageSize();
 
-        coll = &ecsManager->GetComponent<Collider>(entity);
+        auto coll = &ecsManager->GetComponent<Collider>(entity);
         coll->m_collisionLayer = "enemy";
         coll->m_size = sprite->getImageSize() / 2.0f;
         coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
@@ -138,49 +107,8 @@ namespace PitudoEngine {
         coll2->m_size = sprite2->getImageSize()/ 2.0f;
         coll2->SetOnCollisionCallback(&enemy2->OnCollisionCallBack);
 
-
-        ////Enemy 2
-        // entity2 = ecsManager->CreateEntity();
-
-        //ecsManager->AddComponent<Transform>(entity2, Vec2(250, 150), Vec2(1, 1), 0.0f);
-        //ecsManager->AddComponent<Sprite>(entity2, &ecsManager->GetComponent<Transform>(entity2), "../data/images/rojo_g.png", Vec2(0.5f));
-        //ecsManager->AddComponent<Collider>(entity2, &ecsManager->GetComponent<Transform>(entity2), ColliderShape::CIRCLE, Vec2(0.5f));
-        //ecsManager->AddComponent<SuperPangGame::Enemy>(entity2, 4, new SuperPangGame::WaveMovement({ 90,0 }, 40.0f, -80.0f));
-
-        // enemy2 = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity2);
-        // trs2 = &ecsManager->GetComponent<Transform>(entity2);
-        // sprite2 = &ecsManager->GetComponent<Sprite>(entity2);
-        //trs2->scale = sprite2->getImageSize();
-
-        // coll2 = &ecsManager->GetComponent<Collider>(entity2);
-        //coll2->m_collisionLayer = "enemy";
-        //coll2->m_size = sprite2->getImageSize() / 2.0f;
-        //coll2->SetOnCollisionCallback(&enemy2->OnCollisionCallBack);
-
-
-        ////Enemy 2
-        //entity2 = ecsManager->CreateEntity();
-
-        //ecsManager->AddComponent<Transform>(entity2, Vec2(50, 75), Vec2(1, 1), 0.0f);
-        //ecsManager->AddComponent<Sprite>(entity2, &ecsManager->GetComponent<Transform>(entity2), "../data/images/rojo_g.png", Vec2(0.5f));
-        //ecsManager->AddComponent<Collider>(entity2, &ecsManager->GetComponent<Transform>(entity2), ColliderShape::CIRCLE, Vec2(0.5f));
-        //ecsManager->AddComponent<SuperPangGame::Enemy>(entity2, 4, new SuperPangGame::WaveMovement({ 90,0 }, 40.0f, -80.0f));
-
-        //enemy2 = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity2);
-        //trs2 = &ecsManager->GetComponent<Transform>(entity2);
-        //sprite2 = &ecsManager->GetComponent<Sprite>(entity2);
-        //trs2->scale = sprite2->getImageSize();
-
-        //coll2 = &ecsManager->GetComponent<Collider>(entity2);
-        //coll2->m_collisionLayer = "enemy";
-        //coll2->m_size = sprite2->getImageSize() / 2.0f;
-        //coll2->SetOnCollisionCallback(&enemy2->OnCollisionCallBack);
-
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
 
-        //sprite = new Sprite();
-        //std::string x("../data/safe.xml");
-        //Sprite::Load(x, *sprite);
         // MEM LEAK TESTING
         //int* x = new int();
     }
@@ -208,11 +136,6 @@ namespace PitudoEngine {
     }
 
     bool Engine::Quit(){
-        //to do:: QUITAR
-            //std::string x("../data/safe.xml");
-            //Sprite::Save(x, *sprite);
-            //delete sprite;
-        //to do:: QUITAR
 
         ecsManager->Close(); //CERRAR MANAGER
 
@@ -242,6 +165,7 @@ namespace PitudoEngine {
 
         ecsManager->GetSystem<SuperPangGame::PlayersSystem>().Update(m_deltaTime);
         ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
+
         ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
 
         ecsManager->GetSystem<GameManagerSystem>().CleanEntities();
@@ -324,10 +248,56 @@ namespace PitudoEngine {
         signatureEnemySystem.set(ecsManager->GetComponentType<Sprite>());
         ecsManager->SetSystemSignature<SuperPangGame::EnemySystem>(signatureEnemySystem);
     }
+   
+    void Engine::RegisterSystems(){
+
+        auto gameManager = ecsManager->RegisterSystem<GameManagerSystem>();
+
+        auto readFilesSystem = ecsManager->RegisterSystem<ReadFilesSystem>(); //Registrar todos los componenets k tengan que ser leidos
+
+        auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
+        inputSystem->setContext(m_screen);
+
+        auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
+        auto enemysSystem = ecsManager->RegisterSystem<SuperPangGame::EnemySystem>();
+
+        auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
+
+        auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
+        renderSystem->setContext(m_screen);
+
+    #ifdef _DEBUG
+        auto renderDebugSystem = ecsManager->RegisterSystem<RenderDebugSystem>();
+        renderDebugSystem->setContext(m_screen);
+    #endif
+    }
+
+    void Engine::RegisterComponents(){
+
+        auto readFilesSystem = &ecsManager->GetSystem<ReadFilesSystem>();
+
+        ecsManager->RegisterComponent<Transform>();
+        readFilesSystem->RegisterComponent<Transform>("Transform");
+
+        ecsManager->RegisterComponent<Sprite>();
+        readFilesSystem->RegisterComponent<Sprite>("Sprite");
+
+        ecsManager->RegisterComponent<Collider>();
+        readFilesSystem->RegisterComponent<Collider>("Collider");
+
+        // TO DO:: QUITAR
+        ecsManager->RegisterComponent<SuperPangGame::PlayerController>();
+        readFilesSystem->RegisterComponent<SuperPangGame::PlayerController>("PlayerController");
+
+        ecsManager->RegisterComponent<SuperPangGame::Enemy>();
+        readFilesSystem->RegisterComponent<SuperPangGame::Enemy>("Enemy");
+    }
+
     int Engine::getWidth()
     {
         return SCREEN_WIDTH;
     }
+
     int Engine::getHeight()
     {
         return SCREEN_HEIGHT;

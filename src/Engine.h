@@ -15,7 +15,7 @@ namespace PitudoEngine {
 	class Engine{
 	private:
 		Tigr* m_screen;
-		ECSManager* ecsManager;
+		ECSManager* ecsManager = nullptr;
 
 		bool m_bIsRunning = false;
 
@@ -48,7 +48,10 @@ namespace PitudoEngine {
 		static void logme(const std::string& text);
 
 		void CreateBorders();
+
 		void SetSignatures();
+		void RegisterSystems();
+		void RegisterComponents();
 
 		static int getWidth();
 		static int getHeight();

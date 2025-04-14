@@ -47,6 +47,8 @@ namespace PitudoEngine {
 
         virtual ~Collider() = default;
 
+        void ReadData(const std::unordered_map<std::string, std::string>& values, Entity e) override;
+
         bool collides(const Collider& other) const;
         bool collides(const Vec2& circlePos, float circleRadius) const;
         bool collides(const Vec2& rectPos, const Vec2& rectSize) const;

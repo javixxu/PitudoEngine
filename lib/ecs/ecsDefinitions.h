@@ -1,7 +1,8 @@
 #pragma once
 #include <stdint.h>
 #include <bitset>
-
+#include <unordered_map>
+#include <string>
 
 // A simple type alias
 using Entity = uint32_t;
@@ -18,6 +19,8 @@ using Signature = std::bitset<MAX_COMPONENTS>;
 
 class Component {
 public:
+    std::string m_tag = "default";
     Component() {};
     virtual ~Component() {};
+    virtual void ReadData(const std::unordered_map<std::string,std::string>& values,Entity e) {};
 };

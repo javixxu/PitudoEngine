@@ -19,6 +19,47 @@ namespace SuperPangGame {
 		m_numCollisions = m_lifes;
 	}
 
+	void Enemy::ReadData(const std::unordered_map<std::string, std::string>& values, Entity e){
+
+		auto itLifes = values.find("lifes");
+		if (itLifes != values.end()) {
+			m_lifes = std::stoi(itLifes->second);
+		}
+		else {
+			m_lifes = 1; // valor por defecto
+		}
+
+		// Leer tipo de movimiento
+		auto itMovement = values.find("movement");
+		if (itMovement != values.end()) {
+			const std::string movementType = itMovement->second;
+			auto speed = Vec2(std::stof(values.at("velocity_x")), std::stof(values.at("velocity_y")));
+			if (movementType == "ortho") {
+				auto* move = new OrthoMovement(speed);
+				m_movementBehavior = move;
+			}
+			else if (movementType == "wave") {
+				auto* move = new WaveMovement(speed, std::stof(values.at("gravity")), std::stof(values.at("damping")));
+				m_movementBehavior = move;
+			}
+			else {
+				m_movementBehavior = nullptr;
+			}
+		}
+		else {
+			m_movementBehavior = nullptr;
+		}
+
+		m_numCollisions = 0;
+
+		//Set callBack
+		auto* coll = &ECSManager::getInstance().GetComponent<Collider>(e);
+
+		assert(coll && "Collider Not Found Reading Data.");
+
+		coll->SetOnCollisionCallback(&this->OnCollisionCallBack);
+	}
+
 	Enemy::Enemy(const Enemy& other) noexcept{
 		*this = other;
 	}

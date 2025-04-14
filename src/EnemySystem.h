@@ -9,7 +9,7 @@ namespace SuperPangGame {
 		float m_timeSpawn = 5.0f;
 		float m_currentTimeSpawn;
 
-		std::vector<const Enemy*> m_prefabs;
+		std::vector<Entity> m_prefabs;
 	public:
 		EnemySystem();
 		~EnemySystem();
@@ -18,6 +18,6 @@ namespace SuperPangGame {
 		void CreateFromOther(Entity oldEnemy);
 		void CreateNewEnemy();
 
-		void SetEnemyPrefab(Enemy* enemyPrefab);
+		void SetEnemyPrefabs(const std::vector<Entity>& enemyPrefabs);
 	};
 }
