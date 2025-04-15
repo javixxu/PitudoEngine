@@ -19,26 +19,37 @@ namespace SuperPangGame{
 	void ScoreSystem::Init(std::string _recordsFile){
 		m_RecordsFile = _recordsFile;
 
+        ReadFile();//Leer Record
+
         auto* renderSystem = &m_ecsManager->GetSystem<PitudoEngine::RenderSystem>();
 
         renderSystem->addTextCallback([this]() {
             char buffer[32];
             snprintf(buffer, sizeof(buffer), "Score: %.2f", this->GetCurrentScore());
             return std::string(buffer);
-        }, PitudoEngine::Engine::getWidth() - 100, 20, tigrRGB(255, 255, 255));
+        }, (float)(PitudoEngine::Engine::GetWidth() - 100), 20.0f, tigrRGB(255, 255, 255));
 	}
 
 	void ScoreSystem::Update(float deltaTime){
+
 		m_CurrentScore += deltaTime;
 	}
 
-	bool ScoreSystem::IsBetterScore() {
+    void ScoreSystem::Reset(){
+        m_CurrentScore = 0.0f;
+    }
+
+	void ScoreSystem::TrySetRecord() {
 		m_BestScore = m_CurrentScore > m_BestScore ? m_CurrentScore: m_BestScore;
-		return m_CurrentScore > m_BestScore;
 	}
 
     const float ScoreSystem::GetCurrentScore() const{
         return m_CurrentScore;
+    }
+
+    const float ScoreSystem::GetRecordScore() const
+    {
+        return m_BestScore;
     }
 
 	void ScoreSystem::ReadFile(){

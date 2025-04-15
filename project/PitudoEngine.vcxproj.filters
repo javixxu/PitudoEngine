@@ -117,7 +117,7 @@
     <ClCompile Include="..\src\GameManagerSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SpawnSystem.cpp">
+    <ClCompile Include="..\src\PangGameManager.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,7 +212,7 @@
     <ClInclude Include="..\src\GameManagerSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SpawnSystem.h">
+    <ClInclude Include="..\src\PangGameManager.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>

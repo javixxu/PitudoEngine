@@ -1,5 +1,6 @@
 #include "EnemySystem.h"
 #include <ecs/ECSManager.h>
+
 #include "ReadFilesSystem.h"
 #include "Engine.h"
 
@@ -10,6 +11,7 @@
 #include "Enemy.h"
 #include "Collider.h"
 #include "Sprite.h"
+#include "PangGameManager.h"
 
 using namespace PitudoEngine;
 
@@ -24,6 +26,7 @@ namespace SuperPangGame {
 	}
 
 	void EnemySystem::Update(float deltaTime) {
+
 		m_currentTimeSpawn += deltaTime;
 		if (m_currentTimeSpawn >= m_timeSpawn) {
 			CreateNewEnemy(); //Create ENEMY
@@ -37,6 +40,14 @@ namespace SuperPangGame {
 			if(enemy.m_movementBehavior != nullptr)
 				enemy.m_movementBehavior->Move(transform, deltaTime);
 		} 
+	}
+
+	void EnemySystem::Reset(){
+		m_currentTimeSpawn = 0.0f;
+
+		for (auto& entity : mEntities) {
+			m_ecsManager->GetSystem<PangGameManager>().AddEntitiesToDestroy(&entity);
+		}
 	}
 
 	void EnemySystem::CreateFromOther(Entity Entity)
@@ -91,8 +102,8 @@ namespace SuperPangGame {
 		}
 		auto& newTransform = m_ecsManager->GetComponent<Transform>(newEnt);
 		newTransform.position = Vec2(
-			75 + std::rand() % (Engine::getWidth() - 125 - 75),
-			75 + std::rand() % (Engine::getHeight() - 125 - 75)
+			static_cast<float>(75 + std::rand() % (Engine::GetWidth() - 125 - 75)),
+			static_cast<float>(75 + std::rand() % (Engine::GetHeight() - 125 - 75))
 		);
 	}
 

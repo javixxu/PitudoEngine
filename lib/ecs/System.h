@@ -14,4 +14,5 @@ public:
 	virtual ~System() = default;
 
     virtual void Update(float deltaTime){};
+	virtual void Reset() {};
 };

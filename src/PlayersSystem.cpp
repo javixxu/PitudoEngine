@@ -5,9 +5,11 @@
 #include "Transform.h"
 #include "PlayerController.h"
 
+
 namespace SuperPangGame {
 	PlayersSystem::PlayersSystem() {
 		inputSystem = &m_ecsManager->GetSystem<InputSystem>();
+		gameManager = &m_ecsManager->GetSystem<PangGameManager>();
 	}
 
 	PlayersSystem::~PlayersSystem() {
@@ -18,12 +20,20 @@ namespace SuperPangGame {
 			auto& transform = m_ecsManager->GetComponent<Transform>(entity);
 			auto& playerController = m_ecsManager->GetComponent<PlayerController>(entity);
 
-			if (inputSystem->isKeyPressed(playerController.m_keyMoveRight)) {
-				transform.position.x += playerController.m_speed * deltaTime;
+			if (gameManager->GetGameState() == GameManagerSystem::GameState::START) {
+				if (inputSystem->isKeyPressed(playerController.GetKeyStart())) {
+					gameManager->SetGameState(GameManagerSystem::GameState::PLAYING);
+				}
 			}
-			if (inputSystem->isKeyPressed(playerController.m_keyMoveLeft)) {
-				transform.position.x -= playerController.m_speed * deltaTime;
+			else if (gameManager->GetGameState() == GameManagerSystem::GameState::PLAYING) {
+				if (inputSystem->isKeyPressed(playerController.GetKeyRight())) {
+					transform.position.x += playerController.GetSpeed() * deltaTime;
+				}
+				if (inputSystem->isKeyPressed(playerController.GetKeyLeft())) {
+					transform.position.x -= playerController.GetSpeed() * deltaTime;
+				}
 			}
+			
 		}
 	}
 }

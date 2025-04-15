@@ -6,7 +6,6 @@
 
 #include "Vec2.h"
 
-#include "GameManagerSystem.h"
 #include "ReadFilesSystem.h"
 #include "InputSystem.h"
 #include "ColliderSystem.h"
@@ -14,6 +13,7 @@
 #include "RenderDebugSystem.h"
 
 //GAME
+#include "PangGameManager.h"
 #include "PlayersSystem.h"
 #include "PlayerController.h"
 #include "EnemySystem.h"
@@ -46,11 +46,18 @@ namespace PitudoEngine {
         //REGISTER AND INIT SYSTEMS
         RegisterSystems();
 
+        //INIT SYSTEMS
+        InitSystems();
+
         //REGISTER COMPONENTS
         RegisterComponents();
         
         //SIGNATURES
         SetSignatures();
+
+        //LAYERS COLLISIONS IGNORE
+        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
+        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("border", "border");
 
         //LOAD SCENE
         auto readfilesystem = &ecsManager->GetSystem<ReadFilesSystem>();
@@ -63,15 +70,16 @@ namespace PitudoEngine {
         auto enemySystem = &ecsManager->GetSystem<SuperPangGame::EnemySystem>();
         enemySystem->SetEnemyPrefabs(readfilesystem->ReadPrefabs("../data/prefabs/EnemyPrefabs.xml"));
 
-        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
+        //LOAD SCORES
         ecsManager->GetSystem<SuperPangGame::ScoreSystem>().Init("../data/scores.txt");
+
     }
 
     void Engine::Run(){
 
         SetUp();
 
-        const float mustDelta = (1.0f / fps);
+        const float mustDelta = (1.0f / m_fps);
         float initTime = tigrTime();
         float prevFrameTime= 0.0f;
 
@@ -113,20 +121,24 @@ namespace PitudoEngine {
         m_bIsRunning = !tigrClosed(m_screen) && !tigrKeyDown(m_screen, TK_ESCAPE);
         //TO DO:: QUITAR
 
+        auto& gameManager = ecsManager->GetSystem<SuperPangGame::PangGameManager>();
+
         ecsManager->GetSystem<InputSystem>().Update(m_deltaTime);
 
-        ecsManager->GetSystem<GameManagerSystem>().Update(m_deltaTime);
+        gameManager.Update(m_deltaTime);
 
         ecsManager->GetSystem<SuperPangGame::PlayersSystem>().Update(m_deltaTime);
-        ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
 
-        ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
+        if (gameManager.GetGameState() == GameManagerSystem::GameState::PLAYING) {
+            ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
+            ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
+            ecsManager->GetSystem<SuperPangGame::ScoreSystem>().Update(m_deltaTime);
+        }
 
-        ecsManager->GetSystem<SuperPangGame::ScoreSystem>().Update(m_deltaTime);
-
-        ecsManager->GetSystem<GameManagerSystem>().CleanEntities();
+        ecsManager->GetSystem<SuperPangGame::PangGameManager>().CleanEntities();
 
         ecsManager->GetSystem<RenderSystem>().Update(m_deltaTime);
+
     #ifdef _DEBUG
         ecsManager->GetSystem<RenderDebugSystem>().Update(m_deltaTime);
     #endif
@@ -172,7 +184,7 @@ namespace PitudoEngine {
         ecsManager->AddComponent<Collider>(rightBorder, &ecsManager->GetComponent<Transform>(rightBorder), 
             ColliderShape::RECT, Vec2(0.5f), Vec2(BORDER_THICKNESS, SCREEN_HEIGHT), layer);
 
-        ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers(layer, layer);
+        //ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers(layer, layer);
     }
    
     void Engine::SetSignatures(){
@@ -207,28 +219,31 @@ namespace PitudoEngine {
    
     void Engine::RegisterSystems(){
 
-        auto gameManager = ecsManager->RegisterSystem<GameManagerSystem>();
-
+        auto gameManager = ecsManager->RegisterSystem<SuperPangGame::PangGameManager>();
         auto readFilesSystem = ecsManager->RegisterSystem<ReadFilesSystem>(); //Registrar todos los componenets k tengan que ser leidos
-
         auto inputSystem = ecsManager->RegisterSystem<InputSystem>();
-        inputSystem->setContext(m_screen);
-
         auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
-
         auto enemysSystem = ecsManager->RegisterSystem<SuperPangGame::EnemySystem>();
-
-
         auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
-
         auto renderSystem = ecsManager->RegisterSystem<RenderSystem>();
-        renderSystem->setContext(m_screen);
-
     #ifdef _DEBUG
         auto renderDebugSystem = ecsManager->RegisterSystem<RenderDebugSystem>();
-        renderDebugSystem->setContext(m_screen);
     #endif
         auto scoreSystem = ecsManager->RegisterSystem<SuperPangGame::ScoreSystem>();
+    }
+
+    void Engine::InitSystems(){
+        auto inputSystem = &ecsManager->GetSystem<InputSystem>();
+        inputSystem->setContext(m_screen);
+        auto renderSystem = &ecsManager->GetSystem<RenderSystem>();
+        renderSystem->setContext(m_screen);
+    #ifdef _DEBUG
+        auto renderDebugSystem = &ecsManager->GetSystem<RenderDebugSystem>();
+        renderDebugSystem->setContext(m_screen);
+
+        auto gameManager = &ecsManager->GetSystem<SuperPangGame::PangGameManager>();
+        gameManager->Init();
+    #endif
     }
 
     void Engine::RegisterComponents(){
@@ -252,13 +267,11 @@ namespace PitudoEngine {
         readFilesSystem->RegisterComponent<SuperPangGame::Enemy>("Enemy");
     }
 
-    int Engine::getWidth()
-    {
+    int Engine::GetWidth(){
         return SCREEN_WIDTH;
     }
 
-    int Engine::getHeight()
-    {
+    int Engine::GetHeight(){
         return SCREEN_HEIGHT;
     }
 }

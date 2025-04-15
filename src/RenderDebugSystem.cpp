@@ -3,6 +3,7 @@
 
 #include <tigr/tigr.h>
 #include <ecs/ECSManager.h>
+#include "RenderSystem.h"
 
 #include "Transform.h"
 #include "Collider.h"
@@ -34,7 +35,12 @@ namespace PitudoEngine {
 			}
 
 		}
-		//TO DO:: GENERA 2 MEMORY LEAKS POR LA PUTISIMA CARA
+
+		for (const auto& entry : m_TextCallbacks) {
+			std::string text = entry.getText();
+			Engine::printText(m_Window, text, { entry.x, entry.y }, entry.color);
+		}
+
 		RenderDebug(deltaTime);
 
 		tigrUpdate(m_Window);
@@ -43,5 +49,9 @@ namespace PitudoEngine {
 	void RenderDebugSystem::RenderDebug(float deltaTime) {
 		Engine::printText(m_Window, "DeltaTime: " + Engine::sstr(deltaTime), { 30,30 });
 		Engine::printText(m_Window, "FPS: " + Engine::sstr(1.0 / deltaTime), { 30,45 });
+	}
+
+	void RenderDebugSystem::addTextCallback(std::function<std::string()> callback, float x, float y, TPixel color){
+		m_TextCallbacks.push_back({ callback, x, y, color });
 	}
 }

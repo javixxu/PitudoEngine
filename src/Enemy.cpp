@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include <ecs/ECSManager.h>
-#include "GameManagerSystem.h"
+#include "PangGameManager.h"
 
 #include "Vec2.h"
 #include "Collider.h"
@@ -131,7 +131,7 @@ namespace SuperPangGame {
 			enemy1.m_lifes--;  //reducir tamaño
 
 			//DELETE THIS AND INSTANCE OTHER
-			ecsManager.GetSystem<GameManagerSystem>().AddEntitiesToDestroy(&_MEntity);
+			ecsManager.GetSystem<PangGameManager>().AddEntitiesToDestroy(&_MEntity);
 
 			if (enemy1.m_lifes > 0) {
 				ecsManager.GetSystem<EnemySystem>().CreateFromOther(_MEntity);
@@ -160,7 +160,7 @@ namespace SuperPangGame {
 	}
 
 	void OrthoMovement::OnCollision(const Transform& transform){
-		if (Engine::getWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
+		if (Engine::GetWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
 			m_velocity.x = -m_velocity.x;
 		else m_velocity.y = -m_velocity.y;
 	}
@@ -184,7 +184,7 @@ namespace SuperPangGame {
 	}
 
 	void WaveMovement::OnCollision(const Transform& transform){
-		if(Engine::getWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
+		if(Engine::GetWidth() - transform.scale.x * 2 <= transform.position.x || transform.scale.x * 2 >= transform.position.x)
 			m_velocity.x = -m_velocity.x;
 		else
 			m_velocity.y = m_damping;
