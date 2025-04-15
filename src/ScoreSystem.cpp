@@ -20,10 +20,14 @@ namespace SuperPangGame{
 		m_CurrentScore += deltaTime;
 	}
 
-	bool ScoreSystem::isBetterScore() {
+	bool ScoreSystem::IsBetterScore() {
 		m_BestScore = m_CurrentScore > m_BestScore ? m_CurrentScore: m_BestScore;
 		return m_CurrentScore > m_BestScore;
 	}
+
+    const float ScoreSystem::GetCurrentScore() const{
+        return m_CurrentScore;
+    }
 
 	void ScoreSystem::ReadFile(){
         std::fstream file(m_RecordsFile, std::ios::in | std::ios::out);

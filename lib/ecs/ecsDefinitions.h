@@ -10,7 +10,7 @@ using Entity = uint32_t;
 using ComponentType = uint8_t;
 
 // Used to define the size of arrays later on
-const Entity MAX_ENTITIES = 1024;
+const Entity MAX_ENTITIES = 2048;
 // Used to define the size of arrays later on
 const ComponentType MAX_COMPONENTS = 128;
 

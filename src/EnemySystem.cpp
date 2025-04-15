@@ -26,8 +26,7 @@ namespace SuperPangGame {
 	void EnemySystem::Update(float deltaTime) {
 		m_currentTimeSpawn += deltaTime;
 		if (m_currentTimeSpawn >= m_timeSpawn) {
-			//TO DO:: CREATE ENEMY
-			CreateNewEnemy();
+			CreateNewEnemy(); //Create ENEMY
 			m_currentTimeSpawn = 0.0f;
 		}
 
@@ -92,7 +91,7 @@ namespace SuperPangGame {
 		}
 		auto& newTransform = m_ecsManager->GetComponent<Transform>(newEnt);
 
-		newTransform.position = Vec2(std::rand() % Engine::getWidth() - 100, std::rand() % Engine::getHeight() - 100);
+		newTransform.position = Vec2(std::rand() % (Engine::getWidth() - 200), std::rand() % (Engine::getHeight() - 200));
 	}
 
 	void EnemySystem::SetEnemyPrefabs(std::vector<PitudoEngine::PrefabData*> enemyPrefabs){

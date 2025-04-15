@@ -15,7 +15,9 @@ namespace SuperPangGame {
 
 		void Update(float deltaTime) override;
 
-		bool isBetterScore();
+		bool IsBetterScore();
+
+		const float GetCurrentScore() const;
 
 		void ReadFile();
 		void SaveBestRecord();

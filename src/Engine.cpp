@@ -71,46 +71,10 @@ namespace PitudoEngine {
         auto enemySystem = &ecsManager->GetSystem<SuperPangGame::EnemySystem>();
         enemySystem->SetEnemyPrefabs(readfilesystem->ReadPrefabs("../data/prefabs/EnemyPrefabs.xml"));
 
-       // //CREATE ENEMY
-       // entity = ecsManager->CreateEntity();
-
-       // ecsManager->AddComponent<Transform>(entity, Vec2(600, 300), Vec2(1, 1), 0.0f);
-       // ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/amarillo_3.png", Vec2(0.5f));
-       // ecsManager->AddComponent<Collider>(entity, &ecsManager->GetComponent<Transform>(entity), ColliderShape::CIRCLE, Vec2(0.5f));
-       // ecsManager->AddComponent<SuperPangGame::Enemy>(entity,3,new SuperPangGame::OrthoMovement({90,90}));
-
-       // auto* enemy = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity);
-       // trs = &ecsManager->GetComponent<Transform>(entity);
-       // sprite = &ecsManager->GetComponent<Sprite>(entity);
-       // trs->scale = sprite->getImageSize();
-
-       // auto coll = &ecsManager->GetComponent<Collider>(entity);
-       // coll->m_collisionLayer = "enemy";
-       // coll->m_size = sprite->getImageSize() / 2.0f;
-       // coll->SetOnCollisionCallback(&enemy->OnCollisionCallBack);
-
-       // //Enemy 2
-       //auto entity2 = ecsManager->CreateEntity();
-
-       // ecsManager->AddComponent<Transform>(entity2, Vec2(200, 300), Vec2(1, 1), 0.0f);
-       // ecsManager->AddComponent<Sprite>(entity2, &ecsManager->GetComponent<Transform>(entity2), "../data/images/rojo_4.png", Vec2(0.5f));
-       // ecsManager->AddComponent<Collider>(entity2, &ecsManager->GetComponent<Transform>(entity2), ColliderShape::CIRCLE, Vec2(0.5f));
-       // ecsManager->AddComponent<SuperPangGame::Enemy>(entity2, 4, new SuperPangGame::WaveMovement({ 120,0 }, 80.0f, -160.0f));
-
-       // auto enemy2 = &ecsManager->GetComponent<SuperPangGame::Enemy>(entity2);
-       // auto trs2 = &ecsManager->GetComponent<Transform>(entity2);
-       // auto sprite2 = &ecsManager->GetComponent<Sprite>(entity2);
-       // trs2->scale = sprite2->getImageSize();
-
-       // auto coll2 = &ecsManager->GetComponent<Collider>(entity2);
-       // coll2->m_collisionLayer = "enemy";
-       // coll2->m_size = sprite2->getImageSize()/ 2.0f;
-       // coll2->SetOnCollisionCallback(&enemy2->OnCollisionCallBack);
-
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
 
         // MEM LEAK TESTING
-        //int* x = new int();
+        int* x = new int();
     }
 
     void Engine::Run(){
