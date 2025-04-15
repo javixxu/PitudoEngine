@@ -90,8 +90,10 @@ namespace SuperPangGame {
 			constructor(newEnt);
 		}
 		auto& newTransform = m_ecsManager->GetComponent<Transform>(newEnt);
-
-		newTransform.position = Vec2(std::rand() % (Engine::getWidth() - 200), std::rand() % (Engine::getHeight() - 200));
+		newTransform.position = Vec2(
+			75 + std::rand() % (Engine::getWidth() - 125 - 75),
+			75 + std::rand() % (Engine::getHeight() - 125 - 75)
+		);
 	}
 
 	void EnemySystem::SetEnemyPrefabs(std::vector<PitudoEngine::PrefabData*> enemyPrefabs){

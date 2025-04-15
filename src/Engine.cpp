@@ -18,6 +18,7 @@
 #include "PlayerController.h"
 #include "EnemySystem.h"
 #include "Enemy.h"
+#include "ScoreSystem.h"
 //GAME
 
 #include "Transform.h"
@@ -63,6 +64,7 @@ namespace PitudoEngine {
         enemySystem->SetEnemyPrefabs(readfilesystem->ReadPrefabs("../data/prefabs/EnemyPrefabs.xml"));
 
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
+        ecsManager->GetSystem<SuperPangGame::ScoreSystem>().Init("../data/scores.txt");
     }
 
     void Engine::Run(){
@@ -101,9 +103,9 @@ namespace PitudoEngine {
         return m_bIsRunning;
     }
 
-    void Engine::printText(Tigr* screen, const std::string& text, Vec2 pos)
+    void Engine::printText(Tigr* screen, const std::string& text, Vec2 pos,TPixel color)
     {
-        tigrPrint(screen, tfont, (int)pos.x, (int)pos.y, tigrRGB(0xff, 0xff, 0xff), text.c_str());
+        tigrPrint(screen, tfont, (int)pos.x, (int)pos.y, color, text.c_str());
     }
 
     void Engine::Update(){
@@ -119,6 +121,8 @@ namespace PitudoEngine {
         ecsManager->GetSystem<SuperPangGame::EnemySystem>().Update(m_deltaTime);
 
         ecsManager->GetSystem<ColliderSystem>().Update(m_deltaTime);
+
+        ecsManager->GetSystem<SuperPangGame::ScoreSystem>().Update(m_deltaTime);
 
         ecsManager->GetSystem<GameManagerSystem>().CleanEntities();
 
@@ -211,7 +215,9 @@ namespace PitudoEngine {
         inputSystem->setContext(m_screen);
 
         auto playersSystem = ecsManager->RegisterSystem<SuperPangGame::PlayersSystem>();
+
         auto enemysSystem = ecsManager->RegisterSystem<SuperPangGame::EnemySystem>();
+
 
         auto colliderSystem = ecsManager->RegisterSystem<ColliderSystem>();
 
@@ -222,6 +228,7 @@ namespace PitudoEngine {
         auto renderDebugSystem = ecsManager->RegisterSystem<RenderDebugSystem>();
         renderDebugSystem->setContext(m_screen);
     #endif
+        auto scoreSystem = ecsManager->RegisterSystem<SuperPangGame::ScoreSystem>();
     }
 
     void Engine::RegisterComponents(){

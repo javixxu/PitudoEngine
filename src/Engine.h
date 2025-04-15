@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <tigr/tigr.h>
 
-struct Tigr;
 class Vec2;
 class Sprite;
 class ECSManager;
@@ -43,7 +43,7 @@ namespace PitudoEngine {
 			return sstr.str();
 		}
 
-		static void printText(Tigr* screen,const std::string& text,Vec2 pos);
+		static void printText(Tigr* screen,const std::string& text,Vec2 pos,TPixel color = tigrRGB(0xff, 0xff, 0xff));
 
 		static void logme(const std::string& text);
 

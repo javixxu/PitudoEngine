@@ -1,8 +1,12 @@
 #include "ScoreSystem.h"
+#include <ecs/ECSManager.h>
 
 #include <fstream>
 #include <iostream>
 #include <limits>
+
+#include "RenderSystem.h"
+#include "Engine.h"
 
 namespace SuperPangGame{
 	ScoreSystem::ScoreSystem() :
@@ -14,6 +18,14 @@ namespace SuperPangGame{
 
 	void ScoreSystem::Init(std::string _recordsFile){
 		m_RecordsFile = _recordsFile;
+
+        auto* renderSystem = &m_ecsManager->GetSystem<PitudoEngine::RenderSystem>();
+
+        renderSystem->addTextCallback([this]() {
+            char buffer[32];
+            snprintf(buffer, sizeof(buffer), "Score: %.2f", this->GetCurrentScore());
+            return std::string(buffer);
+        }, PitudoEngine::Engine::getWidth() - 100, 20, tigrRGB(255, 255, 255));
 	}
 
 	void ScoreSystem::Update(float deltaTime){

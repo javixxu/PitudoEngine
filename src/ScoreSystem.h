@@ -7,7 +7,7 @@ namespace SuperPangGame {
 
 		float m_CurrentScore;
 		float m_BestScore;
-
+	public:
 		ScoreSystem();
 		~ScoreSystem();
 
