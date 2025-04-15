@@ -51,30 +51,18 @@ namespace PitudoEngine {
         //SIGNATURES
         SetSignatures();
 
-        //BACKGROUND
-        auto entity = ecsManager->CreateEntity();
-
-        ecsManager->AddComponent<Transform>(entity, Vec2(0, 0), Vec2(1, 1), 0.0f);
-        ecsManager->AddComponent<Sprite>(entity, &ecsManager->GetComponent<Transform>(entity), "../data/images/background.png", Vec2(0.5f));
-
-        Transform* trs = &ecsManager->GetComponent<Transform>(entity);
-        Sprite* sprite = &ecsManager->GetComponent<Sprite>(entity);
-
-        trs->position = sprite->getImageSize() / 2;
+        //LOAD SCENE
+        auto readfilesystem = &ecsManager->GetSystem<ReadFilesSystem>();
+        readfilesystem->ReadSceneXML("../data/Scene.xml");
 
         //BORDER COLLIDERS
         CreateBorders();
 
-        auto readfilesystem = &ecsManager->GetSystem<ReadFilesSystem>();
-        readfilesystem->ReadSceneXML("../data/Scene.xml");
-
+        //LOAD ENEMYS PREFABS
         auto enemySystem = &ecsManager->GetSystem<SuperPangGame::EnemySystem>();
         enemySystem->SetEnemyPrefabs(readfilesystem->ReadPrefabs("../data/prefabs/EnemyPrefabs.xml"));
 
         ecsManager->GetSystem<ColliderSystem>().AddIgnoreLayers("enemy", "enemy");
-
-        // MEM LEAK TESTING
-        int* x = new int();
     }
 
     void Engine::Run(){

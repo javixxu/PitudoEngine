@@ -1,4 +1,8 @@
 <Entities>
+ <Entity name="Background">
+        <Transform pos_x="400" pos_y="300" scale_x="1" scale_y="1" rotation="0" />
+        <Sprite texture="../data/images/background.png" pivot_x="0.5" pivot_y="0.5" />
+    </Entity>
     <Entity name="Player">
         <Transform pos_x="400" pos_y="570" scale_x="1" scale_y="1" rotation="0" />
         <Sprite texture="../data/images/player/Idle.png" pivot_x="0.5" pivot_y="0.5" />
