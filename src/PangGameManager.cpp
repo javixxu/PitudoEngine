@@ -17,7 +17,7 @@ namespace SuperPangGame {
 		GameManagerSystem::Init();
 		auto* renderSystem = &m_ecsManager->GetSystem<PitudoEngine::RenderSystem>();
 
-
+		//UI INFO
 		renderSystem->addTextCallback([this]() {
 			switch (GetGameState()) {
 			case GameState::START:
@@ -38,7 +38,6 @@ namespace SuperPangGame {
 		switch (GetGameState())	{
 		case GameState::START:
 			m_currentTimeSpawn = 0.0f;
-			//SHOW TEXT PRESS SPACE TO START
 			break;
 		case GameState::PLAYING:
 			break;
@@ -53,10 +52,8 @@ namespace SuperPangGame {
 				//SCENE RESTART DESTROY::
 				//  -- ENEMYS == DONE 
 				//  -- RESET ENEMYS CONT == DONE
-				//  -- RESET CURRESTSCORE
 
 				m_ecsManager->GetSystem<EnemySystem>().Reset();
-				scoreSys.Reset();
 			}
 
 			m_currentTimeSpawn += deltatime;
@@ -64,6 +61,7 @@ namespace SuperPangGame {
 
 			if (m_currentTimeSpawn >= 2.5f) {
 				SetGameState(GameState::START);
+				m_ecsManager->GetSystem<ScoreSystem>().Reset(); //RESET CURRENT SCORE
 			}
 			break;
 		}
